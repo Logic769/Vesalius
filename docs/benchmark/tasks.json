@@ -1,0 +1,145 @@
+{
+ "suffix": "Answer from the code in this repository. Be specific: give repository-relative file paths, and line numbers where useful. Do not modify any files. In your final answer, report the findings only; do not describe which tools or steps you used.",
+ "tasks": [
+  {
+   "id": "B1",
+   "repo": "Bilbo",
+   "type": "feature location",
+   "prompt": "Where does this app handle in-app purchases and subscriptions: loading products, buying, restoring purchases, and deciding whether the user has premium access? List the key files and the main types and functions involved.",
+   "set": "original"
+  },
+  {
+   "id": "B2",
+   "repo": "Bilbo",
+   "type": "change impact",
+   "prompt": "I want to rename the `isSubscribed` property of `SubscriptionManager` (Bilbo/Services/SubscriptionManager.swift). Which files use `SubscriptionManager` directly, which of them read `isSubscribed`, and which tests should I run afterwards?",
+   "set": "original"
+  },
+  {
+   "id": "B3",
+   "repo": "Bilbo",
+   "type": "callers",
+   "prompt": "Which functions call `TripPlanningService.importTrip`? List each caller with its file and line.",
+   "set": "original"
+  },
+  {
+   "id": "C1",
+   "repo": "cinder",
+   "type": "symbol usage",
+   "prompt": "Where is the `SettingsManager` class (cinder/App/SettingsManager.swift) used across the codebase, including the watch app? List every file that uses it.",
+   "set": "original"
+  },
+  {
+   "id": "C2",
+   "repo": "cinder",
+   "type": "architecture",
+   "prompt": "Give an architecture overview of this repository: the app and extension targets, the local Swift packages, the main layers or feature folders, and how they depend on each other.",
+   "set": "original"
+  },
+  {
+   "id": "C3",
+   "repo": "cinder",
+   "type": "dependents",
+   "prompt": "Which files depend on cinder/Services/WorkoutPlanScheduler.swift (use the types or functions it declares)? List each file and what it uses.",
+   "set": "original"
+  },
+  {
+   "id": "W1",
+   "repo": "Wax",
+   "type": "change impact",
+   "prompt": "If I change the signature of `MiniLMEmbedder.embed(_:)` in Sources/WaxVectorSearchMiniLM/MiniLMEmbedder.swift, what code would need to be updated? Consider protocol requirements and conformances as well as every call site that can reach this method.",
+   "set": "original"
+  },
+  {
+   "id": "W2",
+   "repo": "Wax",
+   "type": "feature location",
+   "prompt": "How does Wax persist its data to disk? Identify the files that define the on-disk file format and the code path that writes (commits) data to the file.",
+   "set": "original"
+  },
+  {
+   "id": "W3",
+   "repo": "Wax",
+   "type": "dependents",
+   "prompt": "Which files depend on Sources/WaxCore/WAL/WALRecord.swift (use the types it declares)? List each file and what it uses.",
+   "set": "original"
+  },
+  {
+   "id": "I1",
+   "repo": "itsyconnect-macos",
+   "type": "cycles",
+   "prompt": "Are there any circular import dependencies between modules under src/? List each cycle with the files and the imports that form it.",
+   "set": "original"
+  },
+  {
+   "id": "I2",
+   "repo": "itsyconnect-macos",
+   "type": "dependents",
+   "prompt": "Which files import src/lib/encryption.ts, and what do they use it for?",
+   "set": "original"
+  },
+  {
+   "id": "I3",
+   "repo": "itsyconnect-macos",
+   "type": "feature location",
+   "prompt": "Where does the app store and load the App Store Connect API credentials (issuer ID, key ID, private key), and how are they protected at rest? List the key files and functions.",
+   "set": "original"
+  },
+  {
+   "id": "H1",
+   "repo": "Haplo Invest",
+   "type": "feature location",
+   "prompt": "Where does this app load its StoreKit subscription products, decide whether the user has access (active subscription, promo-code comp, or grandfathered install), put the paywall in front of everyone else, and handle purchases and restores? List the key files and the main types and functions involved.",
+   "set": "heldout"
+  },
+  {
+   "id": "H2",
+   "repo": "Haplo Invest",
+   "type": "callers",
+   "prompt": "Which functions call `ModelDownloadManager.downloadedModels`? List each caller with its file and line.",
+   "set": "heldout"
+  },
+  {
+   "id": "H3",
+   "repo": "Haplo Invest",
+   "type": "change impact",
+   "prompt": "If I change the signature of `BaseFeatureViewActions.stockPreviewAction(_:_:)` in Haplo Invest/Views/Page Views/BaseFeatureView.swift, what code would need to be updated? Consider protocol requirements and conformances as well as every call site that can reach this method.",
+   "set": "heldout"
+  },
+  {
+   "id": "H4",
+   "repo": "Haplo Invest",
+   "type": "dependents",
+   "prompt": "Which files depend on Haplo Invest/Backend/TradeScanner/TradeDailySeries.swift (use the types or functions it declares)? List each file and what it uses.",
+   "set": "heldout"
+  },
+  {
+   "id": "E1",
+   "repo": "Espresso",
+   "type": "feature location",
+   "prompt": "Where does this package build the local benchmark artifacts from a text corpus: collecting byte tokens from local source files into a UInt16 dataset, fitting the bigram model, saving the generation, recurrent and future-sidecar weight files, and writing the JSON manifest? List the key files and the main types and functions involved.",
+   "set": "heldout"
+  },
+  {
+   "id": "E2",
+   "repo": "Espresso",
+   "type": "symbol usage",
+   "prompt": "Where is the `DirectTokenSelectingLanguageModel` protocol (Sources/Espresso/GenerationHarness.swift) used across the codebase? List every file that uses it.",
+   "set": "heldout"
+  },
+  {
+   "id": "E3",
+   "repo": "Espresso",
+   "type": "dependents",
+   "prompt": "Which files depend on Sources/Espresso/DecodeForwardPass.swift (use the types or functions it declares)? List each file and what it uses.",
+   "set": "heldout"
+  },
+  {
+   "id": "E4",
+   "repo": "Espresso",
+   "type": "architecture",
+   "prompt": "Give an architecture overview of this repository: the library and executable targets, the main layers or feature folders, and how they depend on each other.",
+   "set": "heldout"
+  }
+ ]
+}

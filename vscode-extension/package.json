@@ -1,0 +1,410 @@
+{
+  "name": "vesalius",
+  "displayName": "Vesalius: Code Anatomy",
+  "description": "Understand the anatomy of your codebase: dependency graph, change impact, code health and natural-language search from a local Vesalius index.",
+  "version": "1.0.0",
+  "publisher": "vesalius",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/haplollc/Vesalius",
+    "directory": "vscode-extension"
+  },
+  "homepage": "https://github.com/haplollc/Vesalius#readme",
+  "bugs": {
+    "url": "https://github.com/haplollc/Vesalius/issues"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "architecture",
+    "dependency graph",
+    "code health",
+    "change impact",
+    "blast radius",
+    "references",
+    "code search",
+    "mcp",
+    "swift",
+    "typescript",
+    "python"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vesalius",
+          "title": "Vesalius",
+          "icon": "media/vesalius.svg"
+        }
+      ]
+    },
+    "views": {
+      "vesalius": [
+        {
+          "id": "vesalius.health",
+          "name": "Health",
+          "icon": "media/vesalius.svg",
+          "contextualTitle": "Vesalius"
+        },
+        {
+          "id": "vesalius.currentFile",
+          "name": "Current File",
+          "icon": "media/vesalius.svg",
+          "contextualTitle": "Vesalius"
+        },
+        {
+          "id": "vesalius.hotspots",
+          "name": "Hotspots",
+          "icon": "media/vesalius.svg",
+          "contextualTitle": "Vesalius",
+          "visibility": "collapsed"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "vesalius.health",
+        "contents": "Open a folder to see the anatomy of its code.\n[Open Folder](command:vscode.openFolder)",
+        "when": "workbenchState == empty"
+      },
+      {
+        "view": "vesalius.health",
+        "contents": "The Vesalius command line tool was not found.\n[Install Vesalius CLI](command:vesalius.installCli)\nOr set the path in [Settings](command:workbench.action.openSettings?%22vesalius.cliPath%22).",
+        "when": "workbenchState != empty && vesalius.cliMissing"
+      },
+      {
+        "view": "vesalius.health",
+        "contents": "Building the index for this workspace…",
+        "when": "workbenchState != empty && !vesalius.cliMissing"
+      }
+    ],
+    "commands": [
+      {
+        "command": "vesalius.ask",
+        "title": "Ask the Codebase…",
+        "category": "Vesalius",
+        "icon": "$(search)"
+      },
+      {
+        "command": "vesalius.showImpact",
+        "title": "Show Change Impact",
+        "category": "Vesalius",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "vesalius.showImpactAtCursor",
+        "title": "Show Change Impact",
+        "category": "Vesalius",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "vesalius.showCurrentFileImpact",
+        "title": "Show Change Impact",
+        "category": "Vesalius",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "vesalius.findReferences",
+        "title": "Find References (Graph)",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.findCallers",
+        "title": "Find Callers",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.showFileContext",
+        "title": "Show File Context",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.updateIndex",
+        "title": "Update Index",
+        "category": "Vesalius",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "vesalius.rebuildIndex",
+        "title": "Rebuild Index",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.showHealth",
+        "title": "Show Repository Health",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.openInApp",
+        "title": "Open in Vesalius App",
+        "category": "Vesalius",
+        "icon": "$(link-external)"
+      },
+      {
+        "command": "vesalius.copyMcpConfig",
+        "title": "Copy MCP Config",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.installCli",
+        "title": "Install Vesalius CLI",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.showOutput",
+        "title": "Show Output",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.refreshHealth",
+        "title": "Refresh",
+        "category": "Vesalius",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vesalius.refreshCurrentFile",
+        "title": "Refresh",
+        "category": "Vesalius",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vesalius.refreshHotspots",
+        "title": "Refresh",
+        "category": "Vesalius",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vesalius.openLocation",
+        "title": "Open Location",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.showReferencesAt",
+        "title": "Show References",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.api.ask",
+        "title": "Ask (programmatic)",
+        "category": "Vesalius"
+      },
+      {
+        "command": "vesalius.api.findReferences",
+        "title": "Find References (programmatic)",
+        "category": "Vesalius"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vesalius.showImpactAtCursor",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.showCurrentFileImpact",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.refreshHealth",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.refreshCurrentFile",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.refreshHotspots",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.openLocation",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.showReferencesAt",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.api.ask",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.api.findReferences",
+          "when": "false"
+        },
+        {
+          "command": "vesalius.findReferences",
+          "when": "editorIsOpen"
+        },
+        {
+          "command": "vesalius.findCallers",
+          "when": "editorIsOpen"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "vesalius.findReferences",
+          "when": "resourceScheme == file",
+          "group": "vesalius@1"
+        },
+        {
+          "command": "vesalius.findCallers",
+          "when": "resourceScheme == file",
+          "group": "vesalius@2"
+        },
+        {
+          "command": "vesalius.showImpactAtCursor",
+          "when": "resourceScheme == file",
+          "group": "vesalius@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "vesalius.showImpact",
+          "when": "resourceScheme == file && !explorerResourceIsFolder",
+          "group": "vesalius@1"
+        },
+        {
+          "command": "vesalius.showFileContext",
+          "when": "resourceScheme == file && !explorerResourceIsFolder",
+          "group": "vesalius@2"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "vesalius.showImpact",
+          "when": "resourceScheme == file",
+          "group": "vesalius@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "vesalius.ask",
+          "when": "view == vesalius.health",
+          "group": "navigation@1"
+        },
+        {
+          "command": "vesalius.updateIndex",
+          "when": "view == vesalius.health",
+          "group": "navigation@2"
+        },
+        {
+          "command": "vesalius.refreshHealth",
+          "when": "view == vesalius.health",
+          "group": "navigation@3"
+        },
+        {
+          "command": "vesalius.openInApp",
+          "when": "view == vesalius.health",
+          "group": "navigation@4"
+        },
+        {
+          "command": "vesalius.showCurrentFileImpact",
+          "when": "view == vesalius.currentFile",
+          "group": "navigation@1"
+        },
+        {
+          "command": "vesalius.refreshCurrentFile",
+          "when": "view == vesalius.currentFile",
+          "group": "navigation@2"
+        },
+        {
+          "command": "vesalius.refreshHotspots",
+          "when": "view == vesalius.hotspots",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Vesalius",
+      "properties": {
+        "vesalius.cliPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to the `vesalius` command. Leave empty to find it automatically: on `PATH`, in `~/.local/bin`, `/usr/local/bin`, `/opt/homebrew/bin`, inside `/Applications/Vesalius.app`, or a development build in `VesaliusKit/.build`."
+        },
+        "vesalius.diagnostics.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Vesalius code-health findings in the Problems panel."
+        },
+        "vesalius.diagnostics.minimumSeverity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "enumDescriptions": [
+            "Every finding, including informational notes.",
+            "Low severity and above (includes possibly unused code).",
+            "Medium severity and above.",
+            "High severity and above.",
+            "Only critical findings."
+          ],
+          "default": "medium",
+          "description": "Lowest severity of Vesalius findings to show in the Problems panel."
+        },
+        "vesalius.codeLens.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show reference counts and change risk above top-level types and functions."
+        },
+        "vesalius.indexOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Update the index incrementally after files are saved."
+        },
+        "vesalius.queryTimeoutSeconds": {
+          "type": "number",
+          "default": 60,
+          "minimum": 5,
+          "description": "How long a single Vesalius query may run before it is cancelled."
+        },
+        "vesalius.indexTimeoutSeconds": {
+          "type": "number",
+          "default": 900,
+          "minimum": 30,
+          "description": "How long an index update may run before it is cancelled."
+        }
+      }
+    },
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "vesalius.mcp",
+        "label": "Vesalius"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "package": "npm run compile && vsce package --no-dependencies --out vesalius-1.0.0.vsix"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.17.0",
+    "@types/vscode": "~1.95.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^3.6.0",
+    "mocha": "^11.1.0",
+    "typescript": "^5.8.3"
+  }
+}

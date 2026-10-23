@@ -1,0 +1,1142 @@
+{
+ "rows": [
+  {
+   "task": "B1",
+   "type": "feature location",
+   "repo": "Bilbo",
+   "baseline_default": {
+    "tokens": 250155,
+    "tokens_range": [
+     196660,
+     303650
+    ],
+    "cost": 0.3723609,
+    "turns": 8.5,
+    "seconds": 38.708,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 97.86720321931588,
+    "quality_range": [
+     97.62575452716298,
+     98.1086519114688
+    ],
+    "recall": 95.83333333333333,
+    "precision": 100.0,
+    "usefulness": 86.83333333333334
+   },
+   "vesalius_deferred": {
+    "tokens": 230492,
+    "tokens_range": [
+     230131,
+     230853
+    ],
+    "cost": 0.3623227,
+    "turns": 10,
+    "seconds": 36.406,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 99.39751510174612,
+    "quality_range": [
+     98.79503020349225,
+     100.0
+    ],
+    "recall": 99.53703703703704,
+    "precision": 99.26271645021644,
+    "usefulness": 92.33333333333334
+   },
+   "baseline": {
+    "tokens": 267784,
+    "tokens_range": [
+     211830,
+     323738
+    ],
+    "cost": 0.4634809,
+    "turns": 8,
+    "seconds": 40.5615,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 98.58484238765928,
+    "quality_range": [
+     98.1086519114688,
+     99.06103286384976
+    ],
+    "recall": 97.22222222222223,
+    "precision": 100.0,
+    "usefulness": 89.33333333333333
+   },
+   "vesalius": {
+    "tokens": 353251,
+    "tokens_range": [
+     350372,
+     356130
+    ],
+    "cost": 0.3719114,
+    "turns": 8,
+    "seconds": 38.677499999999995,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 98.66420249894426,
+    "quality_range": [
+     98.1086519114688,
+     99.21975308641974
+    ],
+    "recall": 98.14814814814815,
+    "precision": 99.22580143168378,
+    "usefulness": 89.83333333333334
+   }
+  },
+  {
+   "task": "B2",
+   "type": "change impact",
+   "repo": "Bilbo",
+   "baseline_default": {
+    "tokens": 181572.5,
+    "tokens_range": [
+     173277,
+     189868
+    ],
+    "cost": 0.20440989999999998,
+    "turns": 8.5,
+    "seconds": 39.959,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 96.59547616986427,
+    "quality_range": [
+     94.90742743551397,
+     98.28352490421456
+    ],
+    "recall": 96.66666666666666,
+    "precision": 96.5833303018177,
+    "usefulness": 75.0
+   },
+   "vesalius_deferred": {
+    "tokens": 150209,
+    "tokens_range": [
+     148175,
+     152243
+    ],
+    "cost": 0.2079648,
+    "turns": 7,
+    "seconds": 28.057000000000002,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 98.25888550005394,
+    "quality_range": [
+     97.68475216708903,
+     98.83301883301884
+    ],
+    "recall": 100.0,
+    "precision": 96.58537038758249,
+    "usefulness": 81.66666666666666
+   },
+   "baseline": {
+    "tokens": 230832,
+    "tokens_range": [
+     180436,
+     281228
+    ],
+    "cost": 0.2291975,
+    "turns": 8.5,
+    "seconds": 32.0835,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 96.73913634887481,
+    "quality_range": [
+     95.63882897595295,
+     97.83944372179666
+    ],
+    "recall": 98.33333333333334,
+    "precision": 95.20340942167567,
+    "usefulness": 75.83333333333334
+   },
+   "vesalius": {
+    "tokens": 369593.5,
+    "tokens_range": [
+     368148,
+     371039
+    ],
+    "cost": 0.2894088,
+    "turns": 9.5,
+    "seconds": 31.979499999999998,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 97.75204787219414,
+    "quality_range": [
+     96.49137383878599,
+     99.01272190560228
+    ],
+    "recall": 100.0,
+    "precision": 95.63572333074876,
+    "usefulness": 79.16666666666666
+   }
+  },
+  {
+   "task": "B3",
+   "type": "callers",
+   "repo": "Bilbo",
+   "baseline_default": {
+    "tokens": 112068.5,
+    "tokens_range": [
+     99220,
+     124917
+    ],
+    "cost": 0.0921319,
+    "turns": 7,
+    "seconds": 15.2255,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 89.16666666666666
+   },
+   "vesalius_deferred": {
+    "tokens": 101650,
+    "tokens_range": [
+     101368,
+     101932
+    ],
+    "cost": 0.1261458,
+    "turns": 6,
+    "seconds": 15.0275,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 92.5
+   },
+   "baseline": {
+    "tokens": 147080,
+    "tokens_range": [
+     125819,
+     168341
+    ],
+    "cost": 0.1232403,
+    "turns": 4.5,
+    "seconds": 14.7385,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.83333333333334
+   },
+   "vesalius": {
+    "tokens": 138210.5,
+    "tokens_range": [
+     91422,
+     184999
+    ],
+    "cost": 0.0989749,
+    "turns": 4.5,
+    "seconds": 9.716,
+    "used_vesalius": 1,
+    "reps": 2,
+    "quality": 97.61904761904762,
+    "quality_range": [
+     95.23809523809523,
+     100.0
+    ],
+    "recall": 95.45454545454545,
+    "precision": 100.0,
+    "usefulness": 82.5
+   }
+  },
+  {
+   "task": "C1",
+   "type": "symbol usage",
+   "repo": "cinder",
+   "baseline_default": {
+    "tokens": 109089.5,
+    "tokens_range": [
+     91114,
+     127065
+    ],
+    "cost": 0.1782453,
+    "turns": 6,
+    "seconds": 21.727,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 99.11341585814654,
+    "quality_range": [
+     98.22683171629308,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 98.25806451612902,
+    "usefulness": 84.16666666666666
+   },
+   "vesalius_deferred": {
+    "tokens": 109976.5,
+    "tokens_range": [
+     92692,
+     127261
+    ],
+    "cost": 0.23386120000000002,
+    "turns": 5.5,
+    "seconds": 21.329500000000003,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 90.83333333333333
+   },
+   "baseline": {
+    "tokens": 141628.5,
+    "tokens_range": [
+     141314,
+     141943
+    ],
+    "cost": 0.1928013,
+    "turns": 4.5,
+    "seconds": 18.505000000000003,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 88.33333333333334
+   },
+   "vesalius": {
+    "tokens": 201153,
+    "tokens_range": [
+     189907,
+     212399
+    ],
+    "cost": 0.3213025,
+    "turns": 5.5,
+    "seconds": 21.522,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 99.30041339399926,
+    "quality_range": [
+     98.60082678799851,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 98.6210194375517,
+    "usefulness": 83.33333333333334
+   }
+  },
+  {
+   "task": "C2",
+   "type": "architecture",
+   "repo": "cinder",
+   "baseline_default": {
+    "tokens": 698902,
+    "tokens_range": [
+     588448,
+     809356
+    ],
+    "cost": 0.6700745,
+    "turns": 19,
+    "seconds": 98.821,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 91.65722026411342,
+    "quality_range": [
+     90.1105570330812,
+     93.20388349514563
+    ],
+    "recall": 84.84848484848484,
+    "precision": 99.69288992192622,
+    "usefulness": 75.83333333333334
+   },
+   "vesalius_deferred": {
+    "tokens": 637338.5,
+    "tokens_range": [
+     560824,
+     713853
+    ],
+    "cost": 0.7007660999999998,
+    "turns": 22,
+    "seconds": 108.395,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 93.5917513458329,
+    "quality_range": [
+     92.97208903381642,
+     94.21141365784939
+    ],
+    "recall": 88.48484848484848,
+    "precision": 99.33820887091024,
+    "usefulness": 75.0
+   },
+   "baseline": {
+    "tokens": 813710,
+    "tokens_range": [
+     686130,
+     941290
+    ],
+    "cost": 0.6780354999999999,
+    "turns": 16.5,
+    "seconds": 88.59299999999999,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 91.23258478484777,
+    "quality_range": [
+     89.56612230691093,
+     92.89904726278463
+    ],
+    "recall": 84.24242424242425,
+    "precision": 99.59194629473268,
+    "usefulness": 75.0
+   },
+   "vesalius": {
+    "tokens": 836793,
+    "tokens_range": [
+     776413,
+     897173
+    ],
+    "cost": 0.6980972000000001,
+    "turns": 18,
+    "seconds": 98.14250000000001,
+    "used_vesalius": 2,
+    "reps": 2,
+    "quality": 88.46597457974292,
+    "quality_range": [
+     87.86652700055325,
+     89.06542215893258
+    ],
+    "recall": 79.6969696969697,
+    "precision": 99.42438393217357,
+    "usefulness": 65.83333333333333
+   }
+  },
+  {
+   "task": "C3",
+   "type": "dependents",
+   "repo": "cinder",
+   "baseline_default": {
+    "tokens": 270407,
+    "tokens_range": [
+     242251,
+     298563
+    ],
+    "cost": 0.34593090000000004,
+    "turns": 8,
+    "seconds": 39.304,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 95.85812249552677,
+    "quality_range": [
+     95.84962260090907,
+     95.86662239014447
+    ],
+    "recall": 97.91666666666667,
+    "precision": 93.96482565472346,
+    "usefulness": 75.0
+   },
+   "vesalius_deferred": {
+    "tokens": 208742,
+    "tokens_range": [
+     205337,
+     212147
+    ],
+    "cost": 0.2870328,
+    "turns": 6.5,
+    "seconds": 33.9185,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 96.7461828099068,
+    "quality_range": [
+     94.72567053598299,
+     98.76669508383063
+    ],
+    "recall": 97.91666666666667,
+    "precision": 95.60623141226588,
+    "usefulness": 76.66666666666667
+   },
+   "baseline": {
+    "tokens": 291946.5,
+    "tokens_range": [
+     228669,
+     355224
+    ],
+    "cost": 0.2978301,
+    "turns": 6.5,
+    "seconds": 33.7295,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 95.79693022950786,
+    "quality_range": [
+     94.62619265365139,
+     96.96766780536436
+    ],
+    "recall": 93.75,
+    "precision": 97.95628963399925,
+    "usefulness": 76.66666666666666
+   },
+   "vesalius": {
+    "tokens": 255179,
+    "tokens_range": [
+     179948,
+     330410
+    ],
+    "cost": 0.29503820000000003,
+    "turns": 4,
+    "seconds": 26.7145,
+    "used_vesalius": 2,
+    "reps": 2,
+    "quality": 94.98817966903073,
+    "quality_range": [
+     92.10401891252955,
+     97.87234042553192
+    ],
+    "recall": 90.97222222222223,
+    "precision": 99.52380952380952,
+    "usefulness": 75.83333333333334
+   }
+  },
+  {
+   "task": "I1",
+   "type": "cycles",
+   "repo": "itsyconnect-macos",
+   "baseline_default": {
+    "tokens": 335898,
+    "tokens_range": [
+     326950,
+     344846
+    ],
+    "cost": 0.5837121000000001,
+    "turns": 10.5,
+    "seconds": 59.745000000000005,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 98.56580519693526,
+    "quality_range": [
+     98.30939494052501,
+     98.82221545334552
+    ],
+    "recall": 100.0,
+    "precision": 97.18122400475342,
+    "usefulness": 82.5
+   },
+   "vesalius_deferred": {
+    "tokens": 163462,
+    "tokens_range": [
+     133467,
+     193457
+    ],
+    "cost": 0.15950760000000003,
+    "turns": 7.5,
+    "seconds": 31.232,
+    "used_vesalius": 2,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 85.83333333333334
+   },
+   "baseline": {
+    "tokens": 664125,
+    "tokens_range": [
+     634750,
+     693500
+    ],
+    "cost": 0.6368302,
+    "turns": 15,
+    "seconds": 111.191,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 98.48803080359585,
+    "quality_range": [
+     98.30939494052501,
+     98.66666666666667
+    ],
+    "recall": 100.0,
+    "precision": 97.05603546780017,
+    "usefulness": 89.16666666666666
+   },
+   "vesalius": {
+    "tokens": 282897.5,
+    "tokens_range": [
+     258527,
+     307268
+    ],
+    "cost": 0.1521816,
+    "turns": 7.5,
+    "seconds": 21.433500000000002,
+    "used_vesalius": 2,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 89.16666666666666
+   }
+  },
+  {
+   "task": "I2",
+   "type": "dependents",
+   "repo": "itsyconnect-macos",
+   "baseline_default": {
+    "tokens": 81984.5,
+    "tokens_range": [
+     68430,
+     95539
+    ],
+    "cost": 0.11857260000000001,
+    "turns": 5,
+    "seconds": 18.4185,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 91.66666666666666
+   },
+   "vesalius_deferred": {
+    "tokens": 108349,
+    "tokens_range": [
+     95652,
+     121046
+    ],
+    "cost": 0.1275065,
+    "turns": 6,
+    "seconds": 17.637999999999998,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 92.5
+   },
+   "baseline": {
+    "tokens": 119117.5,
+    "tokens_range": [
+     118863,
+     119372
+    ],
+    "cost": 0.11227279999999999,
+    "turns": 4,
+    "seconds": 16.0135,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 99.2214489682844,
+    "quality_range": [
+     98.44289793656881,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 98.4672619047619,
+    "usefulness": 82.5
+   },
+   "vesalius": {
+    "tokens": 203915.5,
+    "tokens_range": [
+     180183,
+     227648
+    ],
+    "cost": 0.1450958,
+    "turns": 5.5,
+    "seconds": 20.665,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 91.66666666666666
+   }
+  },
+  {
+   "task": "I3",
+   "type": "feature location",
+   "repo": "itsyconnect-macos",
+   "baseline_default": {
+    "tokens": 171037.5,
+    "tokens_range": [
+     170691,
+     171384
+    ],
+    "cost": 0.2472198,
+    "turns": 16,
+    "seconds": 39.269000000000005,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 94.16666666666666
+   },
+   "vesalius_deferred": {
+    "tokens": 191239.5,
+    "tokens_range": [
+     172702,
+     209777
+    ],
+    "cost": 0.2672915,
+    "turns": 16.5,
+    "seconds": 34.06,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 94.16666666666666
+   },
+   "baseline": {
+    "tokens": 349307,
+    "tokens_range": [
+     275961,
+     422653
+    ],
+    "cost": 0.3422266,
+    "turns": 16,
+    "seconds": 35.555,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 94.16666666666666
+   },
+   "vesalius": {
+    "tokens": 360226.5,
+    "tokens_range": [
+     287753,
+     432700
+    ],
+    "cost": 0.2944114,
+    "turns": 14.5,
+    "seconds": 34.676500000000004,
+    "used_vesalius": 1,
+    "reps": 2,
+    "quality": 98.83720930232559,
+    "quality_range": [
+     97.67441860465117,
+     100.0
+    ],
+    "recall": 97.72727272727272,
+    "precision": 100.0,
+    "usefulness": 90.5
+   }
+  },
+  {
+   "task": "W1",
+   "type": "change impact",
+   "repo": "Wax",
+   "baseline_default": {
+    "tokens": 403267,
+    "tokens_range": [
+     257018,
+     549516
+    ],
+    "cost": 0.4234702,
+    "turns": 15.5,
+    "seconds": 124.4885,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 98.88888888888889,
+    "quality_range": [
+     98.83040935672514,
+     98.94736842105264
+    ],
+    "recall": 98.85057471264368,
+    "precision": 98.95833333333333,
+    "usefulness": 84.16666666666667
+   },
+   "vesalius_deferred": {
+    "tokens": 281811,
+    "tokens_range": [
+     237708,
+     325914
+    ],
+    "cost": 0.4134183,
+    "turns": 12.5,
+    "seconds": 45.799,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 88.83333333333334
+   },
+   "baseline": {
+    "tokens": 462042.5,
+    "tokens_range": [
+     461252,
+     462833
+    ],
+    "cost": 0.4174625,
+    "turns": 11,
+    "seconds": 59.873000000000005,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 97.9469543829877,
+    "quality_range": [
+     96.89844355772743,
+     98.99546520824796
+    ],
+    "recall": 99.42528735632183,
+    "precision": 96.51739536016757,
+    "usefulness": 81.66666666666666
+   },
+   "vesalius": {
+    "tokens": 689436.5,
+    "tokens_range": [
+     562487,
+     816386
+    ],
+    "cost": 0.5338548,
+    "turns": 14.5,
+    "seconds": 61.744,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 92.5
+   }
+  },
+  {
+   "task": "W2",
+   "type": "feature location",
+   "repo": "Wax",
+   "baseline_default": {
+    "tokens": 278094.5,
+    "tokens_range": [
+     271525,
+     284664
+    ],
+    "cost": 0.39955430000000003,
+    "turns": 12,
+    "seconds": 47.235,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 97.51970820300772,
+    "quality_range": [
+     97.42963695230324,
+     97.60977945371222
+    ],
+    "recall": 96.3963963963964,
+    "precision": 98.6937071993998,
+    "usefulness": 84.0
+   },
+   "vesalius_deferred": {
+    "tokens": 225280.5,
+    "tokens_range": [
+     202117,
+     248444
+    ],
+    "cost": 0.3610205,
+    "turns": 9.5,
+    "seconds": 43.7715,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 93.79436731492879,
+    "quality_range": [
+     91.20523330157799,
+     96.38350132827958
+    ],
+    "recall": 91.8918918918919,
+    "precision": 95.97866297748374,
+    "usefulness": 68.33333333333333
+   },
+   "baseline": {
+    "tokens": 565525,
+    "tokens_range": [
+     450820,
+     680230
+    ],
+    "cost": 0.7602798000000001,
+    "turns": 11,
+    "seconds": 63.596999999999994,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 97.88498185169959,
+    "quality_range": [
+     97.86986596623687,
+     97.90009773716231
+    ],
+    "recall": 97.2972972972973,
+    "precision": 98.48006251852996,
+    "usefulness": 87.16666666666666
+   },
+   "vesalius": {
+    "tokens": 428233.5,
+    "tokens_range": [
+     418935,
+     437532
+    ],
+    "cost": 0.45311440000000003,
+    "turns": 12,
+    "seconds": 45.644499999999994,
+    "used_vesalius": 2,
+    "reps": 2,
+    "quality": 96.8620050642541,
+    "quality_range": [
+     94.12680054403747,
+     99.59720958447073
+    ],
+    "recall": 95.94594594594595,
+    "precision": 97.83671224531238,
+    "usefulness": 81.66666666666666
+   }
+  },
+  {
+   "task": "W3",
+   "type": "dependents",
+   "repo": "Wax",
+   "baseline_default": {
+    "tokens": 140405.5,
+    "tokens_range": [
+     119405,
+     161406
+    ],
+    "cost": 0.1726277,
+    "turns": 5,
+    "seconds": 21.0405,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 96.6423380297924,
+    "quality_range": [
+     93.2846760595848,
+     100.0
+    ],
+    "recall": 94.73684210526315,
+    "precision": 98.71738641475483,
+    "usefulness": 84.16666666666667
+   },
+   "vesalius_deferred": {
+    "tokens": 123681.5,
+    "tokens_range": [
+     122410,
+     124953
+    ],
+    "cost": 0.1937675,
+    "turns": 5,
+    "seconds": 24.5415,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 95.87550193716896,
+    "quality_range": [
+     92.9225558728537,
+     98.82844800148422
+    ],
+    "recall": 94.73684210526315,
+    "precision": 97.16878018577552,
+    "usefulness": 78.33333333333334
+   },
+   "baseline": {
+    "tokens": 247778,
+    "tokens_range": [
+     191554,
+     304002
+    ],
+    "cost": 0.24462689999999998,
+    "turns": 5,
+    "seconds": 22.014499999999998,
+    "used_vesalius": 0,
+    "reps": 2,
+    "quality": 98.76368271105113,
+    "quality_range": [
+     97.52736542210226,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 97.58732813080638,
+    "usefulness": 88.33333333333334
+   },
+   "vesalius": {
+    "tokens": 158055.5,
+    "tokens_range": [
+     151719,
+     164392
+    ],
+    "cost": 0.2169907,
+    "turns": 4,
+    "seconds": 18.4695,
+    "used_vesalius": 2,
+    "reps": 2,
+    "quality": 94.05287312505655,
+    "quality_range": [
+     94.04771710183127,
+     94.05802914828185
+    ],
+    "recall": 89.47368421052632,
+    "precision": 99.13405308142151,
+    "usefulness": 76.66666666666667
+   }
+  }
+ ],
+ "summary": {
+  "baseline_default": {
+   "tasks": 12,
+   "mean_tokens": 252740.125,
+   "median_task_tokens": 215863.75,
+   "mean_cost": 0.317359175,
+   "mean_turns": 10.083333333333334,
+   "mean_seconds": 46.99508333333333,
+   "quality": 97.7256815271326,
+   "recall": 97.10408039412123,
+   "precision": 98.50414677890315,
+   "usefulness": 83.88888888888889,
+   "runs_using_vesalius": 0,
+   "runs": 24
+  },
+  "vesalius_deferred": {
+   "tasks": 12,
+   "mean_tokens": 211019.29166666666,
+   "median_task_tokens": 177350.75,
+   "mean_cost": 0.2867171083333333,
+   "mean_turns": 9.5,
+   "mean_seconds": 36.68129166666667,
+   "quality": 98.13868366746979,
+   "recall": 97.7139405154756,
+   "precision": 98.66166419035287,
+   "usefulness": 84.75,
+   "runs_using_vesalius": 2,
+   "runs": 24
+  },
+  "baseline": {
+   "tasks": 12,
+   "mean_tokens": 358406.3333333333,
+   "median_task_tokens": 279865.25,
+   "mean_cost": 0.3748570333333333,
+   "mean_turns": 9.208333333333334,
+   "mean_seconds": 44.70458333333333,
+   "quality": 97.88821603904236,
+   "recall": 97.52254703763325,
+   "precision": 98.40497739437279,
+   "usefulness": 85.33333333333333,
+   "runs_using_vesalius": 0,
+   "runs": 24
+  },
+  "vesalius": {
+   "tasks": 12,
+   "mean_tokens": 356412.0833333333,
+   "median_task_tokens": 318074.25,
+   "mean_cost": 0.32253180833333334,
+   "mean_turns": 8.958333333333334,
+   "mean_seconds": 35.78208333333333,
+   "quality": 97.2118294270496,
+   "recall": 95.61823236713587,
+   "precision": 99.11679191522511,
+   "usefulness": 83.22222222222223,
+   "runs_using_vesalius": 12,
+   "runs": 24
+  }
+ },
+ "comparisons": {
+  "shipped": {
+   "baseline": "baseline_default",
+   "treatment": "vesalius_deferred",
+   "tasks": 12,
+   "token_change_pct": -13.480218226429797,
+   "token_change_ci95": [
+    -24.49284375241256,
+    -1.7015204188031152
+   ],
+   "cost_change_pct": -5.844644834249612,
+   "quality_delta": 0.41300214033719723,
+   "quality_delta_ci95": [
+    -0.5020116166694066,
+    1.1230455065665244
+   ],
+   "usefulness_delta": 0.861111111111113,
+   "fewer_tokens_tasks": 9,
+   "better_quality_tasks": 5,
+   "worse_quality_tasks": 1
+  },
+  "loaded": {
+   "baseline": "baseline",
+   "treatment": "vesalius",
+   "tasks": 12,
+   "token_change_pct": 2.679220774807156,
+   "token_change_ci95": [
+    -18.516637372898003,
+    26.294321473455184
+   ],
+   "cost_change_pct": -10.95702826510182,
+   "quality_delta": -0.6763866119927684,
+   "quality_delta_ci95": [
+    -1.767667047325889,
+    0.3273364080272915
+   ],
+   "usefulness_delta": -2.1111111111111107,
+   "fewer_tokens_tasks": 5,
+   "better_quality_tasks": 3,
+   "worse_quality_tasks": 5
+  }
+ },
+ "vesalius_used_split": {
+  "used": {
+   "runs": 12,
+   "token_change_pct": -26.79243349995295,
+   "quality_delta": -1.4933281067153874
+  },
+  "unused": {
+   "runs": 12,
+   "token_change_pct": 40.22511993943652,
+   "quality_delta": 0.14055488272984698
+  }
+ },
+ "first_prompt_tokens": {
+  "vesalius_deferred": 22872.5,
+  "baseline_default": 22396.5,
+  "baseline": 39312.0,
+  "vesalius": 44133.5
+ }
+}

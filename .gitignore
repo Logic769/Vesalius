@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Xcode
+xcuserdata/
+DerivedData/
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Python
+__pycache__/
+*.pyc
+
+# Benchmark runs: answers, keys, grades and transcripts stay out of the repository
+answer_keys*.json
+grades*.json
+blind_map*.json
+expectations*.json
+runs.json
+**/transcripts/
+
+# Benchmark outputs hold answer keys, answers or local paths: write --out folders outside the repository
+*-judge[0-9]*.json
+panels-*.json
+journal.jsonl

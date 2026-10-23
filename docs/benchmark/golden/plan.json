@@ -1,0 +1,30 @@
+{
+  "about": "Planned MCP call per benchmark task for golden_check.py. \"$question\" is the task prompt from ../tasks.json, verbatim. The expected content is private and lives outside the repository.",
+  "tools": {
+    "usages": {"budget": 1500, "p95_ms": 500, "gate": "G1"},
+    "feature_map": {"budget": 1500, "p95_ms": 1500, "gate": "G2"},
+    "architecture": {"budget": 1500, "p95_ms": 1500, "deferred": true},
+    "dependency_cycles": {"budget": 1500, "p95_ms": 500, "deferred": true},
+    "outline": {"budget": 2000, "p95_ms": 500, "deferred": true}
+  },
+  "gates": {
+    "G1": ["B3", "C1", "C3", "W3", "I2", "B2"],
+    "G2": ["B1", "I3", "W2"],
+    "G3": ["C2", "I1"]
+  },
+  "tasks": {
+    "B1": {"tool": "feature_map", "arguments": {"question": "$question"}, "gate": "G2"},
+    "B2": {"tool": "usages", "arguments": {"target": "SubscriptionManager.isSubscribed", "change": "rename"}, "gate": "G1"},
+    "B3": {"tool": "usages", "arguments": {"target": "TripPlanningService.importTrip"}, "gate": "G1"},
+    "C1": {"tool": "usages", "arguments": {"target": "cinder/App/SettingsManager.swift#SettingsManager"}, "gate": "G1",
+           "secondary": [{"tool": "usages", "arguments": {"target": "SettingsManager"}, "expect": "choices naming both declarations"}]},
+    "C2": {"tool": "architecture", "arguments": {}, "gate": "G3"},
+    "C3": {"tool": "usages", "arguments": {"target": "cinder/Services/WorkoutPlanScheduler.swift"}, "gate": "G1"},
+    "W1": {"tool": "usages", "arguments": {"target": "MiniLMEmbedder.embed(_:)", "change": "signature"}, "gate": null},
+    "W2": {"tool": "feature_map", "arguments": {"question": "$question"}, "gate": "G2"},
+    "W3": {"tool": "usages", "arguments": {"target": "Sources/WaxCore/WAL/WALRecord.swift"}, "gate": "G1"},
+    "I1": {"tool": "dependency_cycles", "arguments": {"path": "src/"}, "gate": "G3"},
+    "I2": {"tool": "usages", "arguments": {"target": "src/lib/encryption.ts"}, "gate": "G1"},
+    "I3": {"tool": "feature_map", "arguments": {"question": "$question"}, "gate": "G2"}
+  }
+}

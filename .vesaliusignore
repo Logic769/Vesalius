@@ -1,0 +1,4 @@
+# Vesalius exclusions for this repository (gitignore syntax).
+# Vendored tree-sitter runtime and grammars: third-party C, not part of our architecture.
+VesaliusKit/Sources/CTreeSitter/
+VesaliusKit/Sources/CTreeSitterGrammars/

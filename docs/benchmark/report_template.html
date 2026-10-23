@@ -1,0 +1,369 @@
+<title>Grep or Graph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Silkscreen&display=swap">
+<style>
+/* Layout: a single scoreboard column. Two mascots face off in the hero, then round 1 against round 2, the averages,
+   held-out questions, per-question bars, what Claude reached for, method and every number. */
+:root {
+  --bg: #0E1014; --panel: #151820; --line: #252a35; --ink: #ECEAE6; --muted: #8E95A5; --faint: #5B6170;
+  --clawd: #D97757; --clawd-soft: rgba(217,119,87,.16); --ves: #7C93FF; --ves-soft: rgba(124,147,255,.16);
+  --good: #5CC98A; --bad: #FF6F73; --eye: #15161a; --lens: #E8ECF5;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --pixel: "Silkscreen", var(--mono);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #F5F6F8; --panel: #FFFFFF; --line: #E2E5EB; --ink: #16181D; --muted: #5D6472; --faint: #9AA0AC;
+  --clawd: #C8643F; --clawd-soft: rgba(200,100,63,.13); --ves: #4C6EF5; --ves-soft: rgba(76,110,245,.12);
+  --good: #23955A; --bad: #D93A42; --eye: #15161a; --lens: #FFFFFF; color-scheme: light; } }
+:root[data-theme="light"] {
+  --bg: #F5F6F8; --panel: #FFFFFF; --line: #E2E5EB; --ink: #16181D; --muted: #5D6472; --faint: #9AA0AC;
+  --clawd: #C8643F; --clawd-soft: rgba(200,100,63,.13); --ves: #4C6EF5; --ves-soft: rgba(76,110,245,.12);
+  --good: #23955A; --bad: #D93A42; --eye: #15161a; --lens: #FFFFFF; color-scheme: light; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--body); margin: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(34px, 5.4vw, 60px); font-weight: 800; line-height: 1.02; }
+h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 700; }
+p { margin: 0; max-width: 68ch; color: var(--muted); }
+.eyebrow { font: 12px/1 var(--pixel); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+section { display: grid; gap: 18px; min-width: 0; }
+
+/* Hero: the two contestants. */
+.hero { display: grid; gap: 28px; }
+.faceoff { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: stretch; }
+.contestant { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.contestant.clawd { box-shadow: inset 0 3px 0 var(--clawd); }
+.contestant.ves { box-shadow: inset 0 3px 0 var(--ves); }
+.mascot { height: 120px; display: flex; align-items: end; }
+.mascot svg { height: 100%; width: auto; image-rendering: pixelated; }
+.who { font: 15px/1.2 var(--pixel); }
+.who small { display: block; font: 13px/1.4 var(--body); color: var(--muted); margin-top: 4px; letter-spacing: 0; text-transform: none; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 18px; }
+.stat b { display: block; font: 600 28px/1.1 var(--mono); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; color: var(--muted); }
+.vs { align-self: center; font: 28px/1 var(--pixel); color: var(--faint); }
+.verdict { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { font: 600 13px/1.3 var(--mono); padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); }
+.chip.good { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, transparent); }
+.chip.bad { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, transparent); }
+
+/* Charts. */
+.chart { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; overflow-x: auto; min-width: 0; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart.wide svg { min-width: 620px; }
+.legend { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-flex; align-items: center; gap: 8px; font-style: normal; }
+.legend svg { height: 22px; width: auto; }
+svg text { fill: var(--muted); font-family: var(--body); }
+svg .label { fill: var(--ink); font-weight: 500; }
+svg .value { font-family: var(--mono); font-size: 12px; fill: var(--ink); }
+svg .tick { font-family: var(--mono); font-size: 11px; fill: var(--faint); }
+svg .grid { stroke: var(--line); }
+svg .zero { stroke: var(--faint); }
+svg .set { font: 11px var(--pixel); letter-spacing: .06em; fill: var(--faint); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.note { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; display: grid; gap: 8px; align-content: start; }
+.note h3 { margin: 0; font: 600 15px/1.3 var(--body); color: var(--ink); }
+.note p { font-size: 14px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.table { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+th, td { text-align: right; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:nth-child(-n+3), td:nth-child(-n+3) { text-align: left; }
+th { font: 11px/1 var(--pixel); letter-spacing: .06em; color: var(--muted); font-weight: 400; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+tr:last-child td { border-bottom: 0; }
+.better { color: var(--good); } .worse { color: var(--bad); }
+@media (max-width: 720px) {
+  .faceoff { grid-template-columns: 1fr; } .vs { justify-self: center; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar { transform-box: fill-box; transform-origin: left center; animation: grow .7s cubic-bezier(.2,.8,.2,1) both; }
+  .bar.neg { transform-origin: right center; }
+  @keyframes grow { from { transform: scaleX(.02); } }
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow" id="eyebrow">Claude Code navigation benchmark</div>
+    <h1 id="headline">Grep or graph?</h1>
+    <p id="lede"></p>
+    <div class="faceoff">
+      <div class="contestant clawd">
+        <div class="mascot" id="m-clawd"></div>
+        <div class="who">CLAUDE CODE<small id="who-base"></small></div>
+        <div class="stats" id="s-clawd"></div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="contestant ves">
+        <div class="mascot" id="m-ves"></div>
+        <div class="who">CLAUDE CODE + VESALIUS<small id="who-ves"></small></div>
+        <div class="stats" id="s-ves"></div>
+      </div>
+    </div>
+    <div class="verdict" id="verdict"></div>
+  </header>
+
+  <section>
+    <h2>Round 1 against round 2</h2>
+    <p id="rounds-intro"></p>
+    <div class="chart wide" id="c-rounds"></div>
+  </section>
+
+  <section>
+    <h2 id="avg-title">Averages across every question</h2>
+    <p id="avg-intro"></p>
+    <div class="cols">
+      <div class="chart" id="c-sum-tokens"></div>
+      <div class="chart" id="c-sum-quality"></div>
+    </div>
+    <div class="verdict" id="split"></div>
+  </section>
+
+  <section data-full>
+    <h2>Questions it was built against, and questions it never saw</h2>
+    <p id="sets-intro"></p>
+    <div class="chart wide" id="c-sets"></div>
+  </section>
+
+  <section data-full>
+    <h2>Tokens used, per question</h2>
+    <p id="tokens-note"></p>
+    <div class="legend" id="legend1"></div>
+    <div class="chart wide" id="c-tokens"></div>
+  </section>
+
+  <section data-full>
+    <h2>Answer quality, per question</h2>
+    <p id="quality-note"></p>
+    <div class="legend" id="legend2"></div>
+    <div class="chart wide" id="c-quality"></div>
+  </section>
+
+  <section data-full>
+    <h2>What Claude reached for</h2>
+    <p id="tools-intro"></p>
+    <div class="legend" id="legend3"></div>
+    <div class="chart wide" id="c-tools"></div>
+  </section>
+
+  <section data-full>
+    <h2>How it was measured</h2>
+    <div class="cols" id="method"></div>
+  </section>
+
+  <section data-full>
+    <h2>Every number</h2>
+    <div class="table"><table id="table"></table></div>
+  </section>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+
+// Clawd, drawn from Claude Code's terminal logo: 18 columns, rows twice as tall as wide.
+const BODY = [[0, [[3, 14]]], [1, [[3, 4], [6, 11], [13, 14]]], [2, [[1, 16]]], [3, [[3, 14]]], [4, [[4, 4], [6, 6], [11, 11], [13, 13]]]];
+function clawd(tool, matchFrame = false) {
+  const rects = [];
+  for (const [row, spans] of BODY) for (const [a, b] of spans)
+    rects.push(`<rect x="${a}" y="${row * 2}" width="${b - a + 1}" height="2" fill="var(--clawd)"/>`);
+  rects.push(`<rect x="5" y="2" width="1" height="2" fill="var(--eye)"/><rect x="12" y="2" width="1" height="2" fill="var(--eye)"/>`);
+  // matchFrame: draw the plain Clawd in the holding pose's frame, so both render at the same scale.
+  if (!tool) return `<svg viewBox="${matchFrame ? '-1 -7.2 30 18.2' : '-1 -1 20 12'}" role="img" aria-label="Clawd" shape-rendering="crispEdges">${rects.join('')}</svg>`;
+  // Clawd holding a magnifier with the Vesalius graph in the lens.
+  const lens = `
+    <line x1="17" y1="5" x2="20.6" y2="1.4" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="23.8" cy="-1.8" r="4.3" fill="var(--ves-soft)" stroke="var(--lens)" stroke-width="1.1"/>
+    <g stroke="var(--ves)" stroke-width=".35" opacity=".9">
+      <line x1="21.9" y1="-4" x2="22.9" y2="-1.6"/><line x1="25.7" y1="-4" x2="24.7" y2="-1.6"/>
+      <line x1="22.9" y1="-1.6" x2="23.8" y2=".6"/><line x1="24.7" y1="-1.6" x2="23.8" y2=".6"/>
+      <line x1="21.9" y1="-4" x2="23.8" y2="-2.9"/><line x1="25.7" y1="-4" x2="23.8" y2="-2.9"/>
+    </g>
+    <circle cx="21.9" cy="-4" r=".62" fill="var(--lens)"/><circle cx="25.7" cy="-4" r=".62" fill="var(--lens)"/>
+    <circle cx="23.8" cy="-2.9" r=".45" fill="var(--lens)"/>
+    <circle cx="22.9" cy="-1.6" r=".6" fill="var(--ves)"/><circle cx="24.7" cy="-1.6" r=".6" fill="var(--ves)"/>
+    <circle cx="23.8" cy=".6" r=".95" fill="var(--clawd)"/>`;
+  return `<svg viewBox="-1 -7.2 30 18.2" role="img" aria-label="Clawd holding Vesalius">${lens}<g shape-rendering="crispEdges">${rects.join('')}</g></svg>`;
+}
+
+const fmtK = (n) => n === 0 ? '0' : n >= 1e6 ? (n / 1e6).toFixed(2) + 'M' : Math.round(n / 1000) + 'k';
+// A mean over single runs is a whole number: no decimal to show.
+const num1 = (v) => Number.isInteger(v) ? String(v) : v.toFixed(1);
+const pct = (x) => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x).toFixed(0) + '%';
+const pts = (x) => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x).toFixed(1);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ARM = { baseline: { name: 'Claude Code', color: 'var(--clawd)', tool: false }, vesalius: { name: 'Claude Code + Vesalius', color: 'var(--ves)', tool: true } };
+const inner = (svg) => svg.replace(/^<svg[^>]*>|<\/svg>$/g, '');
+
+function legend(el) {
+  el.innerHTML = Object.values(ARM).map((a) => `<i>${clawd(a.tool)}${esc(a.name)}</i>`).join('');
+}
+
+// Horizontal grouped bars: one group per question, one bar per setup, a caption between question sets.
+function grouped(el, metric, opts) {
+  const B = DATA.pair.baseline, T = DATA.pair.treatment;
+  const rows = DATA.rows.filter((r) => r[B] && r[T]).map((r) => ({ ...r, baseline: r[B], vesalius: r[T] }));
+  const W = 1000, labelW = 250, right = 96, barH = 14, gap = 4, groupGap = 16, top = 26, setH = 30;
+  const groupH = 2 * barH + gap;
+  const sets = [...new Set(rows.map((r) => r.set))];
+  const H = top + rows.length * (groupH + groupGap) + sets.length * setH;
+  const max = opts.max ?? Math.max(...rows.flatMap((r) => ['baseline', 'vesalius'].map((a) => (r[a][metric + '_range'] || [0, r[a][metric]])[1])));
+  const x = (v) => labelW + (W - labelW - right) * (v / max);
+  const ticks = opts.ticks(max);
+  let s = ticks.map((t) => `<line class="grid" x1="${x(t)}" x2="${x(t)}" y1="${top - 8}" y2="${H - groupGap / 2}"/><text class="tick" x="${x(t)}" y="${top - 12}" text-anchor="middle">${opts.tick(t)}</text>`).join('');
+  let y0 = top;
+  for (const set of sets) {
+    s += `<text class="set" x="0" y="${y0 + 18}">${esc(DATA.setNames[set] || set)}</text>`;
+    y0 += setH;
+    for (const r of rows.filter((row) => row.set === set)) {
+      s += `<text class="label" x="0" y="${y0 + 12}" font-size="14">${esc(r.task)} · ${esc(r.repo)}</text><text x="0" y="${y0 + 29}" font-size="12">${esc(r.type)}${r.vesalius.used_vesalius ? ' · Vesalius used ' + r.vesalius.used_vesalius + '/' + r.vesalius.reps : ''}</text>`;
+      if (r.vesalius.used_vesalius) s += `<circle cx="${labelW - 14}" cy="${y0 + barH + gap + barH / 2}" r="4" fill="var(--ves)"/>`;
+      ['baseline', 'vesalius'].forEach((arm, j) => {
+        const d = r[arm], v = d[metric] ?? 0, y = y0 + j * (barH + gap);
+        s += `<rect class="bar" x="${labelW}" y="${y}" width="${Math.max(2, x(v) - labelW)}" height="${barH}" rx="3" fill="${ARM[arm].color}"/>`;
+        const range = d[metric + '_range'];
+        if (range && range[1] > range[0]) s += `<g stroke="var(--ink)" stroke-opacity=".55"><line x1="${x(range[0])}" x2="${x(range[1])}" y1="${y + barH / 2}" y2="${y + barH / 2}" stroke-width="1.2"/><line x1="${x(range[0])}" x2="${x(range[0])}" y1="${y + 4}" y2="${y + barH - 4}"/><line x1="${x(range[1])}" x2="${x(range[1])}" y1="${y + 4}" y2="${y + barH - 4}"/></g>`;
+        s += `<text class="value" x="${Math.max(x(v), range ? x(range[1]) : 0) + 8}" y="${y + barH - 3}">${opts.value(v)}</text>`;
+      });
+      y0 += groupH + groupGap;
+    }
+  }
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria)}">${s}</svg>`;
+}
+
+// Summary: one bar per setup, the mascot riding at the end of each bar.
+function summary(el, metric, opts) {
+  const S = DATA.summary, P = DATA.pair;
+  const W = 540, left = 16, right = 104, top = 54, barH = 32, inner2 = 10;
+  const H = top + 2 * barH + inner2 + 14;
+  const vals = [S[P.baseline][metric], S[P.treatment][metric]];
+  const max = opts.max ?? Math.max(...vals) * 1.02;
+  const x = (v) => left + (W - left - right) * (v / max);
+  let s = `<text class="label" x="${left}" y="22" font-size="16">${esc(opts.title)}</text><text x="${left}" y="40" font-size="12">${esc(opts.subtitle)}</text>`;
+  [['baseline', P.baseline], ['vesalius', P.treatment]].forEach(([role, arm], i) => {
+    const v = S[arm][metric], yy = top + i * (barH + inner2);
+    s += `<rect class="bar" x="${left}" y="${yy}" width="${Math.max(4, x(v) - left)}" height="${barH}" rx="6" fill="${ARM[role].color}"/>`;
+    s += `<text x="${left + 10}" y="${yy + barH / 2 + 5}" font-size="13" font-weight="600" style="fill:#fff">${opts.value(v)}</text>`;
+    s += `<g transform="translate(${x(v) + 8}, ${yy + barH - (ARM[role].tool ? 22 : 14)}) scale(${ARM[role].tool ? 1.6 : 1.4})">${inner(clawd(ARM[role].tool))}</g>`;
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.title)}">${s}</svg>`;
+}
+
+// Side-by-side panels sharing one label column: "share" panels show n of N, "diverge" panels a change around zero
+// with its 95% confidence whisker.
+function panels(el, rows, specs) {
+  const W = 1000, labelW = 230, gapX = 34, rowH = 48, top = 62, barH = 16;
+  const pw = (W - labelW - gapX * (specs.length - 1)) / specs.length, valueW = 58;
+  const H = top + rows.length * rowH;
+  let s = '';
+  rows.forEach((r, i) => {
+    const y = top + i * rowH;
+    s += `<text class="label" x="0" y="${y + 13}" font-size="14">${esc(r.label)}</text><text x="0" y="${y + 30}" font-size="12">${esc(r.sub || '')}</text>`;
+  });
+  specs.forEach((p, k) => {
+    const x0 = labelW + k * (pw + gapX), x1 = x0 + pw - valueW;
+    s += `<text class="label" x="${x0}" y="20" font-size="14">${esc(p.title)}</text><text x="${x0}" y="38" font-size="12">${esc(p.subtitle)}</text>`;
+    if (p.kind === 'share') {
+      const x = (v) => x0 + (x1 - x0) * v;
+      for (const t of [0, 0.5, 1]) s += `<line class="grid" x1="${x(t)}" x2="${x(t)}" y1="${top - 8}" y2="${H - 10}"/><text class="tick" x="${x(t)}" y="${H + 6}" text-anchor="middle">${t * 100}%</text>`;
+      rows.forEach((r, i) => {
+        const y = top + i * rowH, d = p.get(r), v = d.of ? d.n / d.of : 0;
+        s += `<rect x="${x(0)}" y="${y + 2}" width="${x(1) - x(0)}" height="${barH}" rx="3" fill="var(--line)"/>`;
+        s += `<rect class="bar" x="${x(0)}" y="${y + 2}" width="${Math.max(2, x(v) - x(0))}" height="${barH}" rx="3" fill="var(--ves)" opacity="${r.faded ? 0.45 : 1}"/>`;
+        s += `<text class="value" x="${x1 + 8}" y="${y + 15}">${d.n}/${d.of}</text>`;
+      });
+      return;
+    }
+    const xl = x0 + valueW * 0.5;
+    const x = (v) => xl + (x1 - xl) * ((Math.max(p.lo, Math.min(p.hi, v)) - p.lo) / (p.hi - p.lo));
+    for (const t of p.ticks) s += `<line class="${t === 0 ? 'zero' : 'grid'}" x1="${x(t)}" x2="${x(t)}" y1="${top - 8}" y2="${H - 10}"/><text class="tick" x="${x(t)}" y="${H + 6}" text-anchor="middle">${p.tick(t)}</text>`;
+    rows.forEach((r, i) => {
+      const y = top + i * rowH, d = p.get(r), v = d.value;
+      if (v == null) { s += `<text class="tick" x="${x(0) + 6}" y="${y + 14}">not measured</text>`; return; }
+      const a = Math.min(x(0), x(v)), w = Math.max(2, Math.abs(x(v) - x(0)));
+      s += `<rect class="bar ${v < 0 ? 'neg' : ''}" x="${a}" y="${y + 2}" width="${w}" height="${barH}" rx="3" fill="var(--ves)" opacity="${r.faded ? 0.45 : 1}"/>`;
+      if (d.ci) s += `<g stroke="var(--ink)" stroke-opacity=".6"><line x1="${x(d.ci[0])}" x2="${x(d.ci[1])}" y1="${y + 2 + barH / 2}" y2="${y + 2 + barH / 2}" stroke-width="1.2"/><line x1="${x(d.ci[0])}" x2="${x(d.ci[0])}" y1="${y + 6}" y2="${y + barH - 2}"/><line x1="${x(d.ci[1])}" x2="${x(d.ci[1])}" y1="${y + 6}" y2="${y + barH - 2}"/></g>`;
+      const edge = d.ci ? (v < 0 ? Math.min(x(d.ci[0]), x(v)) : Math.max(x(d.ci[1]), x(v))) : x(v);
+      s += `<text class="value" x="${v < 0 ? edge - 6 : edge + 6}" y="${y + 15}" text-anchor="${v < 0 ? 'end' : 'start'}">${p.value(v)}</text>`;
+    });
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H + 14}" role="img" aria-label="${esc(specs.map((p) => p.title).join(', '))}">${s}</svg>`;
+}
+
+// Calls per run, one pair of bars per kind of tool.
+function toolBars(el) {
+  const rows = DATA.toolUse, W = 1000, labelW = 250, right = 70, barH = 14, gap = 4, groupGap = 16, top = 26;
+  const groupH = 2 * barH + gap, H = top + rows.length * (groupH + groupGap);
+  const max = Math.max(1, ...rows.flatMap((r) => [r.baseline, r.vesalius])) * 1.05;
+  const x = (v) => labelW + (W - labelW - right) * (v / max);
+  const step = max > 12 ? 4 : max > 6 ? 2 : 1;
+  let s = '';
+  for (let t = 0; t <= max; t += step) s += `<line class="grid" x1="${x(t)}" x2="${x(t)}" y1="${top - 8}" y2="${H - groupGap / 2}"/><text class="tick" x="${x(t)}" y="${top - 12}" text-anchor="middle">${t}</text>`;
+  rows.forEach((r, i) => {
+    const y0 = top + i * (groupH + groupGap);
+    s += `<text class="label" x="0" y="${y0 + 12}" font-size="14">${esc(r.label)}</text><text x="0" y="${y0 + 29}" font-size="12">${esc(r.sub)}</text>`;
+    ['baseline', 'vesalius'].forEach((arm, j) => {
+      const v = r[arm], y = y0 + j * (barH + gap);
+      s += `<rect class="bar" x="${labelW}" y="${y}" width="${Math.max(2, x(v) - labelW)}" height="${barH}" rx="3" fill="${ARM[arm].color}"/>`;
+      s += `<text class="value" x="${x(v) + 8}" y="${y + barH - 3}">${v.toFixed(1)}</text>`;
+    });
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tool calls per run">${s}</svg>`;
+}
+
+function render() {
+  const S = DATA.summary, P = DATA.pair;
+  document.getElementById('eyebrow').textContent = DATA.eyebrow;
+  document.getElementById('m-clawd').innerHTML = clawd(false, true);
+  document.getElementById('m-ves').innerHTML = clawd(true);
+  const stat = (b, l) => `<div class="stat"><b>${b}</b><span>${l}</span></div>`;
+  for (const [arm, id] of [[P.baseline, 's-clawd'], [P.treatment, 's-ves']]) {
+    const a = S[arm];
+    document.getElementById(id).innerHTML = stat(fmtK(a.mean_tokens), 'tokens per question') + stat(a.quality.toFixed(1), 'answer quality (0 to 100)')
+      + stat(a.mean_turns.toFixed(1), 'turns per question') + stat('$' + a.mean_cost.toFixed(2), 'API cost per question');
+  }
+  for (const [id, key] of [['lede', 'lede'], ['who-base', 'whoBase'], ['who-ves', 'whoVes'], ['rounds-intro', 'roundsIntro'], ['avg-title', 'avgTitle'],
+    ['avg-intro', 'avgIntro'], ['sets-intro', 'setsIntro'], ['tools-intro', 'toolsIntro'], ['tokens-note', 'tokensNote'], ['quality-note', 'qualityNote']])
+    document.getElementById(id).textContent = DATA[key];
+  const chips = (list) => list.map((c) => `<span class="chip ${c.tone || ''}">${esc(c.text)}</span>`).join('');
+  document.getElementById('verdict').innerHTML = chips(DATA.chips);
+  document.getElementById('split').innerHTML = chips(DATA.splitChips);
+  for (const id of ['legend1', 'legend2', 'legend3']) legend(document.getElementById(id));
+
+  const tr = DATA.ranges.tokens, qr = DATA.ranges.quality;
+  const tokensPanel = { kind: 'diverge', title: 'Tokens per question', subtitle: 'change vs Claude Code alone', lo: tr[0], hi: tr[1], ticks: tr[2], tick: pct, value: pct, get: (r) => ({ value: r.tokens, ci: r.tokensCI }) };
+  const qualityPanel = { kind: 'diverge', title: 'Answer quality', subtitle: 'points vs Claude Code alone', lo: qr[0], hi: qr[1], ticks: qr[2], tick: (t) => (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t), value: pts, get: (r) => ({ value: r.quality, ci: r.qualityCI }) };
+  panels(document.getElementById('c-rounds'), DATA.rounds, [
+    { kind: 'share', title: 'Runs that called Vesalius', subtitle: 'Claude Code’s default settings', get: (r) => ({ n: r.used, of: r.runs }) },
+    tokensPanel, qualityPanel]);
+  panels(document.getElementById('c-sets'), DATA.sets, [tokensPanel, qualityPanel]);
+
+  grouped(document.getElementById('c-tokens'), 'tokens', { aria: 'Tokens per question', value: fmtK, tick: fmtK, ticks: (m) => { const step = m > 1.8e6 ? 500e3 : m > 900e3 ? 250e3 : m > 400e3 ? 100e3 : 50e3; return Array.from({ length: Math.floor(m / step) + 1 }, (_, i) => i * step); } });
+  grouped(document.getElementById('c-quality'), 'quality', { aria: 'Answer quality per question', max: 100, value: (v) => v.toFixed(0), tick: (t) => t, ticks: () => [0, 25, 50, 75, 100] });
+  summary(document.getElementById('c-sum-tokens'), 'mean_tokens', { title: 'Tokens per question', subtitle: 'lower is better', value: fmtK });
+  summary(document.getElementById('c-sum-quality'), 'quality', { title: 'Answer quality', subtitle: 'F1 against the verified key, higher is better', value: (v) => v.toFixed(1), max: 100 });
+  toolBars(document.getElementById('c-tools'));
+  document.getElementById('method').innerHTML = DATA.method.map((m) => `<div class="note"><h3>${esc(m.title)}</h3><p>${esc(m.text)}</p></div>`).join('');
+
+  const B = P.baseline, T = P.treatment;
+  let head = '<tr><th>Question</th><th>Set</th><th>Type</th><th>Tokens</th><th>+ Vesalius</th><th>Quality</th><th>+ Vesalius</th><th>Turns</th><th>+ Vesalius</th><th>Vesalius used</th></tr>';
+  const body = DATA.rows.filter((r) => r[B] && r[T]).map((r) => {
+    const a = r[B], b = r[T], t = 100 * (b.tokens / a.tokens - 1), q = (b.quality ?? 0) - (a.quality ?? 0);
+    return `<tr><td>${esc(r.task)} · ${esc(r.repo)}</td><td>${esc(DATA.setShort[r.set] || r.set)}</td><td>${esc(r.type)}</td>`
+      + `<td class="num">${fmtK(a.tokens)}</td><td class="num ${t < 0 ? 'better' : 'worse'}">${fmtK(b.tokens)} <small>${pct(t)}</small></td>`
+      + `<td class="num">${a.quality == null ? '–' : a.quality.toFixed(0)}</td><td class="num ${q >= 1 ? 'better' : q <= -1 ? 'worse' : ''}">${b.quality == null ? '–' : b.quality.toFixed(0)}</td>`
+      + `<td class="num">${num1(a.turns)}</td><td class="num">${num1(b.turns)}</td><td class="num">${b.used_vesalius}/${b.reps}</td></tr>`;
+  }).join('');
+  document.getElementById('table').innerHTML = head + body;
+}
+if (DATA) render();
+// #share: hero, rounds and averages only, for a phone-sized image.
+if (location.hash === '#share') document.querySelectorAll('[data-full]').forEach((el) => { el.hidden = true; });
+</script>

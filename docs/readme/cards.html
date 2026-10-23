@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vesalius README cards</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Silkscreen&display=swap">
+<style>
+/* The README's images, in the benchmark report's identity: dark first, coral for Claude Code, indigo for Vesalius.
+   make_images.py opens this page once per card and theme (?card=hero&theme=light) and screenshots it. */
+:root {
+  --bg: #0E1014; --panel: #151820; --line: #252a35; --ink: #ECEAE6; --muted: #8E95A5; --faint: #5B6170;
+  --clawd: #D97757; --clawd-soft: rgba(217,119,87,.16); --ves: #7C93FF; --ves-soft: rgba(124,147,255,.16);
+  --good: #5CC98A; --eye: #15161a; --lens: #E8ECF5; --dot: 236,238,243; --vdot: 215,221,246;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --pixel: "Silkscreen", var(--mono);
+}
+:root[data-theme="light"] {
+  --bg: #F5F6F8; --panel: #FFFFFF; --line: #E2E5EB; --ink: #16181D; --muted: #5D6472; --faint: #9AA0AC;
+  --clawd: #C8643F; --clawd-soft: rgba(200,100,63,.13); --ves: #4C6EF5; --ves-soft: rgba(76,110,245,.12);
+  --good: #23955A; --eye: #15161a; --lens: #FFFFFF; --dot: 22,24,29; --vdot: 59,79,196;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: transparent; }
+body { font: 16px/1.5 var(--body); color: var(--ink); }
+.card { position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 22px; }
+[hidden] { display: none !important; }
+.eyebrow { font: 13px/1 var(--pixel); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+h1, h2 { font-family: var(--display); margin: 0; letter-spacing: -.015em; text-wrap: balance; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* Banner: name and promise on the left, the brand mark's dot field on the right. */
+#banner { width: 1200px; height: 340px; padding: 0 56px; display: flex; align-items: center; }
+#banner .name { display: flex; align-items: center; gap: 22px; margin: 22px 0 14px; }
+#banner .name img { width: 84px; height: 84px; }
+#banner h1 { font-size: 84px; font-weight: 800; line-height: .9; }
+#banner .tagline { font-size: 25px; line-height: 1.35; color: var(--muted); max-width: 640px; }
+#banner .tagline b { color: var(--ink); font-weight: 600; }
+#banner .mark { position: absolute; width: 440px; height: 440px; right: -36px; top: 50%; transform: translateY(-50%); }
+#banner .mark svg { width: 100%; height: 100%; }
+
+/* Hero: the benchmark face-off. */
+#hero { width: 1200px; padding: 44px 48px 40px; display: grid; gap: 26px; }
+#hero h2 { font-size: 46px; font-weight: 800; line-height: 1.02; }
+.faceoff { display: grid; grid-template-columns: 1fr 56px 1fr; gap: 0; align-items: stretch; }
+.side { border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; display: grid; grid-template-columns: 150px 1fr; gap: 6px 20px; background: var(--bg); }
+.side.claude { box-shadow: inset 0 3px 0 var(--clawd); }
+.side.ves { box-shadow: inset 0 3px 0 var(--ves); }
+.side .mascot { grid-row: span 2; display: flex; align-items: end; height: 92px; }
+.side .mascot svg { height: 100%; width: auto; }
+.side .who { font: 15px/1.2 var(--pixel); letter-spacing: .04em; align-self: end; }
+.side .who small { display: block; font: 13.5px/1.4 var(--body); color: var(--muted); letter-spacing: 0; margin-top: 4px; }
+.side .stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+.stat b { display: block; font: 600 30px/1.1 var(--mono); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12.5px; color: var(--muted); }
+.side.ves .stat b.win { color: var(--ves); }
+.vs { align-self: center; justify-self: center; font: 24px/1 var(--pixel); color: var(--faint); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { font: 600 14px/1 var(--mono); padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.chip.good { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, transparent); }
+.chip.ves { color: var(--ves); border-color: color-mix(in srgb, var(--ves) 45%, transparent); }
+.foot { font-size: 14px; color: var(--muted); }
+
+/* Rounds: what the redesign changed, round 1 against round 2. */
+#rounds { width: 1200px; padding: 40px 48px 36px; display: grid; gap: 24px; }
+#rounds h2 { font-size: 34px; font-weight: 700; }
+#rounds svg text { font-family: var(--body); fill: var(--muted); }
+#rounds svg .label { fill: var(--ink); font-weight: 600; }
+#rounds svg .value { font-family: var(--mono); fill: var(--ink); font-size: 15px; }
+#rounds svg .tick { font-family: var(--mono); fill: var(--faint); font-size: 12px; }
+#rounds svg .head { fill: var(--ink); font-weight: 600; font-size: 16px; }
+#rounds svg .grid { stroke: var(--line); }
+</style>
+</head>
+<body>
+<section class="card" id="banner" hidden>
+  <div>
+    <div class="eyebrow">macOS app · CLI · MCP server · VS Code</div>
+    <div class="name"><img id="icon" alt=""><h1>Vesalius</h1></div>
+    <div class="tagline">A map of your codebase, for you <b>and</b> for Claude Code. Built and kept on your Mac.</div>
+  </div>
+  <div class="mark" id="mark"></div>
+</section>
+
+<section class="card" id="hero" hidden>
+  <div style="display:grid;gap:12px">
+    <div class="eyebrow" id="hero-eyebrow"></div>
+    <h2 id="hero-title"></h2>
+  </div>
+  <div class="faceoff">
+    <div class="side claude">
+      <div class="mascot" id="m-claude"></div>
+      <div class="who">CLAUDE CODE<small>Grep, Glob, Read and a read-only shell</small></div>
+      <div></div>
+      <div class="stats" id="s-claude"></div>
+    </div>
+    <div class="vs">VS</div>
+    <div class="side ves">
+      <div class="mascot" id="m-ves"></div>
+      <div class="who">CLAUDE CODE + VESALIUS<small>the same Claude Code with Vesalius over MCP</small></div>
+      <div></div>
+      <div class="stats" id="s-ves"></div>
+    </div>
+  </div>
+  <div class="chips" id="hero-chips"></div>
+  <div class="foot" id="hero-foot"></div>
+</section>
+
+<section class="card" id="rounds" hidden>
+  <div style="display:grid;gap:10px">
+    <div class="eyebrow">What changed between rounds</div>
+    <h2 id="rounds-title"></h2>
+  </div>
+  <div id="rounds-chart"></div>
+</section>
+
+<script>
+const DATA = /*DATA*/null;
+
+const BODY = [[0, [[3, 14]]], [1, [[3, 4], [6, 11], [13, 14]]], [2, [[1, 16]]], [3, [[3, 14]]], [4, [[4, 4], [6, 6], [11, 11], [13, 13]]]];
+function clawd(tool) {
+  const rects = [];
+  for (const [row, spans] of BODY) for (const [a, b] of spans)
+    rects.push(`<rect x="${a}" y="${row * 2}" width="${b - a + 1}" height="2" fill="var(--clawd)"/>`);
+  rects.push(`<rect x="5" y="2" width="1" height="2" fill="var(--eye)"/><rect x="12" y="2" width="1" height="2" fill="var(--eye)"/>`);
+  if (!tool) return `<svg viewBox="-1 -7.2 30 18.2" shape-rendering="crispEdges">${rects.join('')}</svg>`;
+  const lens = `
+    <line x1="17" y1="5" x2="20.6" y2="1.4" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="23.8" cy="-1.8" r="4.3" fill="var(--ves-soft)" stroke="var(--lens)" stroke-width="1.1"/>
+    <g stroke="var(--ves)" stroke-width=".35" opacity=".9">
+      <line x1="21.9" y1="-4" x2="22.9" y2="-1.6"/><line x1="25.7" y1="-4" x2="24.7" y2="-1.6"/>
+      <line x1="22.9" y1="-1.6" x2="23.8" y2=".6"/><line x1="24.7" y1="-1.6" x2="23.8" y2=".6"/>
+      <line x1="21.9" y1="-4" x2="23.8" y2="-2.9"/><line x1="25.7" y1="-4" x2="23.8" y2="-2.9"/>
+    </g>
+    <circle cx="21.9" cy="-4" r=".62" fill="var(--lens)" stroke="var(--faint)" stroke-width=".15"/><circle cx="25.7" cy="-4" r=".62" fill="var(--lens)" stroke="var(--faint)" stroke-width=".15"/>
+    <circle cx="23.8" cy="-2.9" r=".45" fill="var(--lens)" stroke="var(--faint)" stroke-width=".15"/>
+    <circle cx="22.9" cy="-1.6" r=".6" fill="var(--ves)"/><circle cx="24.7" cy="-1.6" r=".6" fill="var(--ves)"/>
+    <circle cx="23.8" cy=".6" r=".95" fill="var(--clawd)"/>`;
+  return `<svg viewBox="-1 -7.2 30 18.2">${lens}<g shape-rendering="crispEdges">${rects.join('')}</g></svg>`;
+}
+
+const fmtK = (n) => Math.round(n / 1000) + 'k';
+const signed = (x, d = 0) => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x).toFixed(d);
+const stat = (b, l, win) => `<div class="stat"><b class="${win ? 'win' : ''}">${b}</b><span>${l}</span></div>`;
+
+function hero() {
+  const D = DATA, B = D.base, V = D.ves;
+  document.getElementById('hero-eyebrow').textContent = `Benchmark · ${D.tasks} real questions · ${D.repos} codebases · graded blind`;
+  document.getElementById('hero-title').textContent = 'About half the tokens. Quality within noise.';
+  document.getElementById('m-claude').innerHTML = clawd(false);
+  document.getElementById('m-ves').innerHTML = clawd(true);
+  document.getElementById('s-claude').innerHTML = stat(fmtK(B.tokens), 'tokens') + stat(B.quality.toFixed(1), 'answer quality')
+    + stat(B.turns.toFixed(1), 'turns') + stat('$' + B.cost.toFixed(2), 'API cost');
+  document.getElementById('s-ves').innerHTML = stat(fmtK(V.tokens), 'tokens', true) + stat(V.quality.toFixed(1), 'answer quality')
+    + stat(V.turns.toFixed(1), 'turns', true) + stat('$' + V.cost.toFixed(2), 'API cost', true);
+  const C = D.change;
+  const chips = [
+    [`${signed(C.tokens)}% tokens per question (95% CI ${signed(C.tokensCI[0])}% to ${signed(C.tokensCI[1])}%)`, 'good'],
+    [`Answer quality ${signed(C.quality, 1)} points (95% CI ${signed(C.qualityCI[0], 1)} to ${signed(C.qualityCI[1], 1)})`, ''],
+    [`Claude chose Vesalius in ${D.used} of ${D.runs} runs`, 'ves'],
+    [`Held-out questions: ${signed(D.heldout.tokens)}% tokens`, 'good'],
+  ];
+  document.getElementById('hero-chips').innerHTML = chips.map(([t, c]) => `<span class="chip ${c}">${t}</span>`).join('');
+  document.getElementById('hero-foot').textContent = `Plain means per question over ${D.runs * 2} headless runs of Claude Code ${D.claude} (one pinned build, model ${D.model}), the same prompt and read-only tools in both setups, answers scored against keys verified in the code. Percent changes average each question's own ratio, so one expensive question cannot dominate.`;
+}
+
+function rounds() {
+  const D = DATA, R = D.rounds;
+  document.getElementById('rounds-title').textContent = 'Round 1 kept Vesalius out of sight. Round 2 put it in reach.';
+  const W = 1104, labelW = 250, top = 34, rowH = 64, colGap = 36;
+  const cols = [
+    { head: 'Runs that called Vesalius', min: 0, max: 100, ticks: [0, 50, 100], fmt: (t) => t + '%', val: (r) => 100 * r.used / r.runs, text: (r) => `${r.used} of ${r.runs}` },
+    { head: 'Tokens vs Claude Code alone', min: -80, max: 20, ticks: [-80, -40, 0, 20], fmt: (t) => signed(t) + '%', val: (r) => r.tokens, text: (r) => signed(r.tokens) + '%', ci: (r) => r.tokensCI },
+    { head: 'Answer quality, points', min: -4, max: 4, ticks: [-4, 0, 4], fmt: (t) => signed(t), val: (r) => r.quality, text: (r) => signed(r.quality, 1), ci: (r) => r.qualityCI },
+  ];
+  const cw = (W - labelW - colGap * (cols.length - 1)) / cols.length, valueW = 64;
+  const H = top + R.length * rowH + 30;
+  let s = '';
+  cols.forEach((c, k) => {
+    const x0 = labelW + k * (cw + colGap), x1 = x0 + cw - valueW;
+    const x = (v) => x0 + (x1 - x0) * (v - c.min) / (c.max - c.min);
+    s += `<text class="head" x="${x0}" y="16">${c.head}</text>`;
+    for (const t of c.ticks) s += `<line class="grid" x1="${x(t)}" x2="${x(t)}" y1="${top - 6}" y2="${H - 26}"/><text class="tick" x="${x(t)}" y="${H - 8}" text-anchor="middle">${c.fmt(t)}</text>`;
+    R.forEach((r, i) => {
+      const y = top + i * rowH + 14, v = c.val(r), zero = x(Math.max(c.min, Math.min(0, c.max)));
+      const a = Math.min(zero, x(v)), w = Math.max(3, Math.abs(x(v) - zero));
+      const fill = r.faded ? 'var(--faint)' : 'var(--ves)';
+      if (k === 0) s += `<rect x="${x0}" y="${y}" width="${x1 - x0}" height="20" rx="5" fill="var(--line)"/>`;
+      s += `<rect x="${k === 0 ? x0 : a}" y="${y}" width="${k === 0 ? Math.max(4, x(v) - x0) : w}" height="20" rx="5" fill="${fill}"/>`;
+      if (c.ci) { const [lo, hi] = c.ci(r); s += `<line x1="${x(lo)}" x2="${x(hi)}" y1="${y + 10}" y2="${y + 10}" stroke="var(--ink)" stroke-opacity=".55" stroke-width="1.4"/><line x1="${x(lo)}" x2="${x(lo)}" y1="${y + 5}" y2="${y + 15}" stroke="var(--ink)" stroke-opacity=".55"/><line x1="${x(hi)}" x2="${x(hi)}" y1="${y + 5}" y2="${y + 15}" stroke="var(--ink)" stroke-opacity=".55"/>`; }
+      s += `<text class="value" x="${x1 + 10}" y="${y + 15}">${c.text(r)}</text>`;
+    });
+  });
+  R.forEach((r, i) => {
+    const y = top + i * rowH + 14;
+    s += `<text class="label" x="0" y="${y + 9}" font-size="17">${r.label}</text><text x="0" y="${y + 30}" font-size="14">${r.sub}</text>`;
+  });
+  document.getElementById('rounds-chart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${s}</svg>`;
+}
+
+const params = new URLSearchParams(location.search);
+document.documentElement.dataset.theme = params.get('theme') || 'dark';
+const card = params.get('card') || 'hero';
+if (DATA) {
+  document.getElementById('icon').src = DATA.icon;
+  document.getElementById('mark').innerHTML = DATA.mark;
+  hero(); rounds();
+}
+document.getElementById(card).hidden = false;
+// The renderer reads this to size its window to the card.
+const box = document.getElementById(card).getBoundingClientRect();
+document.body.dataset.size = `${Math.ceil(box.width)}x${Math.ceil(box.height)}`;
+</script>
+</body>
+</html>

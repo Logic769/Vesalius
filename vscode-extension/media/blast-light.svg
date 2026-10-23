@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+  <g stroke="#424242" stroke-width="1.4" stroke-linecap="round">
+    <line x1="4.5" y1="4.5" x2="7.6" y2="9.8"/>
+    <line x1="7.6" y1="9.8" x2="10" y2="13.8"/>
+    <line x1="10" y1="13.8" x2="12" y2="19.8"/>
+    <line x1="19.5" y1="4.5" x2="16.4" y2="9.8"/>
+    <line x1="16.4" y1="9.8" x2="14" y2="13.8"/>
+    <line x1="14" y1="13.8" x2="12" y2="19.8"/>
+    <line x1="4.5" y1="4.5" x2="12" y2="7.6"/>
+    <line x1="19.5" y1="4.5" x2="12" y2="7.6"/>
+    <line x1="12" y1="7.6" x2="10" y2="13.8"/>
+    <line x1="12" y1="7.6" x2="14" y2="13.8"/>
+  </g>
+  <g fill="#424242">
+    <circle cx="4.5" cy="4.5" r="2.1"/>
+    <circle cx="19.5" cy="4.5" r="2.1"/>
+    <circle cx="12" cy="7.6" r="1.4"/>
+    <circle cx="7.6" cy="9.8" r="1.6"/>
+    <circle cx="16.4" cy="9.8" r="1.6"/>
+    <circle cx="10" cy="13.8" r="1.5"/>
+    <circle cx="14" cy="13.8" r="1.5"/>
+  </g>
+  <circle cx="12" cy="19.8" r="2.3" fill="#FF6B57"/>
+  <circle cx="12" cy="19.8" r="3.5" stroke="#FF6B57" stroke-width="1"/>
+</svg>

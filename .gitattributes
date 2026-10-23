@@ -1,0 +1,4 @@
+# Vendored tree-sitter runtime and generated grammar tables: keep them out of GitHub's language stats and diffs.
+VesaliusKit/Sources/CTreeSitter/** linguist-vendored
+VesaliusKit/Sources/CTreeSitterGrammars/** linguist-vendored
+VesaliusKit/Sources/CTreeSitterGrammars/**/parser.c linguist-generated

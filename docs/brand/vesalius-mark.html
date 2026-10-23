@@ -1,0 +1,246 @@
+<title>Vesalius Mark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* One dark stage: the mark animates in the middle, the wordmark sits under it. Deliberately single-theme. */
+:root {
+  --bg: #0B0D12; --ink: #ECEEF3; --muted: #7D8496; --line: #20242E;
+  --display: "Sora", "Avenir Next", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--display); }
+.stage { min-height: 100%; display: grid; place-items: center; padding-inline: 16px; padding-block: 28px; box-sizing: border-box; }
+.lockup { display: grid; justify-items: center; gap: 22px; }
+canvas { width: min(82vw, 560px); height: auto; aspect-ratio: 1; display: block; }
+.word { font-weight: 600; font-size: clamp(20px, 3.4vw, 28px); letter-spacing: .42em; margin-right: -.42em; }
+.meta { display: flex; gap: 14px; align-items: center; font: 12px/1 var(--mono); color: var(--muted); }
+button { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+button:focus-visible { outline: 2px solid #7C93FF; outline-offset: 2px; }
+body.export .word, body.export .meta { display: none; }
+body.export .stage { padding: 0; min-height: 0; display: block; }
+body.export canvas { width: 800px; }
+</style>
+
+<div class="stage">
+  <div class="lockup">
+    <canvas id="mark" width="800" height="800" role="img" aria-label="Vesalius mark: a halftone V of dots inside a circle, with a coral root dot"></canvas>
+    <div class="word">VESALIUS</div>
+    <div class="meta"><button id="toggle" type="button">Pause</button><span id="clock">0.0 s</span></div>
+  </div>
+</div>
+
+<script>
+// Geometry and timeline are pure functions of t, so the live page, the video frames and the SVG export match exactly.
+const LOOP = 7.0;                 // seconds
+const SIZE = 800, R = 300;
+// The look, in one place. window.STYLE_OVERRIDE lets an export script try variations without editing this file.
+const STYLE = Object.assign({
+  sp: 26,                         // lattice spacing
+  fieldMax: 3.4, fieldMin: 1.0,   // dot radius at the field's centre and at its rim: one spherical halftone
+  fieldPow: 1.8,                  // how quickly dots shrink toward the rim
+  boost: 2.6,                     // extra radius in the V's core: a swell in the halftone, not a separate shape
+  tint: 0.25,                     // how far the V's dots lean toward indigo
+  hw: 0.125,                      // half width of the V's stroke at the tips (fraction of R)
+  taper: 0.5,                     // stroke width at the root relative to the tips, so the arms converge on the root
+  soft: [0.15, 1.15],             // halftone falloff from the V's centre line, in half widths
+  tipX: 0.52, tipY: -0.24, rootY: 0.26,   // a wide V (about 2:1) centred in the field, in fractions of R
+  rootR: 7,                       // the coral root dot
+}, window.STYLE_OVERRIDE || {});
+const TAU = Math.PI * 2;
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0)); return t * t * (3 - 2 * t); };
+const easeOut = (x) => 1 - Math.pow(1 - clamp(x), 3);
+const easeInOut = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeIn = (x) => clamp(x) ** 3;
+const back = (x) => { x = clamp(x); const c = 1.9; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const mix = (a, b, t) => a.map((v, i) => Math.round(lerp(v, b[i], t)));
+
+// The V: two arms meeting at the root, the coral node of the app icon.
+const SP = STYLE.sp, ROW = SP * Math.sqrt(3) / 2, HW = STYLE.hw * R;
+const ROOT = { x: 0, y: STYLE.rootY * R };
+const TIP_L = { x: -STYLE.tipX * R, y: STYLE.tipY * R }, TIP_R = { x: STYLE.tipX * R, y: STYLE.tipY * R };
+
+function toSegment(p, a, b) {
+  const vx = b.x - a.x, vy = b.y - a.y, wx = p.x - a.x, wy = p.y - a.y;
+  const t = clamp((wx * vx + wy * vy) / (vx * vx + vy * vy));
+  return { d: Math.hypot(p.x - (a.x + t * vx), p.y - (a.y + t * vy)), t };
+}
+
+// Hex lattice clipped to the circle. Rows are anchored on the root so it sits on a dot at x = 0,
+// which keeps the whole mark mirror-symmetric.
+const dots = [];
+for (let j = -24; j <= 24; j++) for (let i = -24; i <= 24; i++) {
+  const x = (i + (Math.abs(j) % 2 ? 0.5 : 0)) * SP, y = ROOT.y + j * ROW;
+  const rho = Math.hypot(x, y);
+  if (rho > R) continue;
+  const l = toSegment({ x, y }, TIP_L, ROOT), r = toSegment({ x, y }, TIP_R, ROOT);
+  const near = l.d <= r.d ? l : r;
+  // 1 on the V's centre line, fading to 0 across its edge; the V ends at the root.
+  const fromRoot = 1 - near.t, hw = HW * lerp(STYLE.taper, 1, fromRoot);
+  const k = y > ROOT.y + 1 ? 0 : 1 - smooth(STYLE.soft[0] * hw, STYLE.soft[1] * hw, near.d);
+  dots.push({ x, y, rho, k, fromRoot, toRoot: Math.hypot(x - ROOT.x, y - ROOT.y) });
+}
+const rootDot = dots.reduce((best, d) => (d.toRoot < best.toRoot ? d : best));
+rootDot.root = true;
+
+const snap = (p) => dots.reduce((best, d) => (Math.hypot(d.x - p.x, d.y - p.y) < Math.hypot(best.x - p.x, best.y - p.y) ? d : best));
+const at = (a, b, t) => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t) });
+const NODES = [TIP_L, at(TIP_L, ROOT, .36), at(TIP_L, ROOT, .70), ROOT, at(TIP_R, ROOT, .70), at(TIP_R, ROOT, .36), TIP_R, { x: 0, y: lerp(TIP_L.y, ROOT.y, 0.25) }].map(snap);
+const EDGES = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [1, 7], [5, 7], [7, 2], [7, 4], [0, 7], [6, 7]];
+
+// The V's skeleton: two edges out of the root, traced like a signal before the dots inflate along them.
+const ARMS = [[ROOT, TIP_L], [ROOT, TIP_R]];
+
+const BLUE = [124, 147, 255], INDIGO = [150, 168, 255], WHITE = [236, 238, 243], CORAL = [255, 122, 89];
+
+function look(d) {                 // a dot in the finished mark: field size, plus the V's halftone swell
+  const field = STYLE.fieldMin + (STYLE.fieldMax - STYLE.fieldMin) * (1 - Math.pow(d.rho / R, STYLE.fieldPow));
+  const fieldAlpha = 0.34 + 0.5 * (1 - d.rho / R);
+  if (d.root) return { field, fieldAlpha, r: STYLE.rootR, color: CORAL, alpha: 1 };
+  return { field, fieldAlpha, r: field + STYLE.boost * d.k * (0.8 + 0.2 * (1 - d.rho / R)),
+           color: mix(WHITE, INDIGO, STYLE.tint * d.k), alpha: Math.min(1, fieldAlpha + 0.3 * d.k) };
+}
+
+function frame(ctx, t, opts = {}) {
+  ctx.save();
+  ctx.fillStyle = '#0B0D12';
+  ctx.fillRect(0, 0, SIZE, SIZE);
+  ctx.translate(SIZE / 2, SIZE / 2 - 4);
+  const exhale = (d) => 1 - easeIn((t - (6.3 + 0.32 * (d.root ? 1 : d.k > .1 ? 1 - d.fromRoot : d.rho / R))) / 0.38);
+
+  // 1. Probe nodes blink on, 2. the graph's edges draw between them.
+  const graphFade = 1 - smooth(1.85, 2.35, t);
+  if (graphFade > 0) {
+    EDGES.forEach(([a, b], i) => {
+      const p = easeInOut((t - (0.55 + 0.085 * i)) / 0.42);
+      if (p <= 0) return;
+      const A = NODES[a], B = NODES[b];
+      ctx.strokeStyle = `rgba(236,238,243,${0.62 * graphFade * (i >= 10 ? 0.45 : 1)})`;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(lerp(A.x, B.x, p), lerp(A.y, B.y, p)); ctx.stroke();
+    });
+    NODES.forEach((n, i) => {
+      const s = back((t - (0.15 + 0.07 * i)) / 0.32);
+      if (s <= 0) return;
+      const isRoot = n.root;
+      const r = (isRoot ? 6.5 : 4.2) * s * lerp(1, 0.55, smooth(1.85, 2.35, t));
+      ctx.fillStyle = isRoot ? `rgba(${CORAL},${graphFade * .95 + (1 - graphFade) * .9})` : `rgba(236,238,243,${0.95 * graphFade})`;
+      ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, TAU); ctx.fill();
+      const ring = clamp((t - (0.15 + 0.07 * i)) / 0.6);
+      if (ring > 0 && ring < 1) {
+        ctx.strokeStyle = `rgba(236,238,243,${0.35 * (1 - ring) * graphFade})`;
+        ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(n.x, n.y, 4 + 16 * easeOut(ring), 0, TAU); ctx.stroke();
+      }
+    });
+  }
+
+  // 3. A scan ring sweeps out from the root and the grid appears behind its front.
+  for (const [start, dur, alpha] of [[1.85, 1.05, 0.55], [3.45, 0.9, 0.45], [3.62, 0.9, 0.3]]) {
+    const p = clamp((t - start) / dur);
+    if (p > 0 && p < 1) {           // the first ring reveals the field; the coral ones are a local ping on the root
+      ctx.strokeStyle = start < 3 ? `rgba(236,238,243,${alpha * (1 - p)})` : `rgba(${CORAL},${alpha * (1 - p)})`;
+      ctx.lineWidth = start < 3 ? 1.2 : 1.6;
+      ctx.beginPath(); ctx.arc(ROOT.x, ROOT.y, easeOut(p) * (start < 3 ? 1.45 * R : 0.3 * R), 0, TAU); ctx.stroke();
+    }
+  }
+
+  // 4. A signal runs from the root up both arms while the field's boundary closes round from below, both sides at once.
+  const trace = easeInOut((t - 2.55) / 0.85), traceFade = 1 - smooth(3.95, 4.6, t);
+  if (trace > 0 && traceFade > 0) {
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = `rgba(${BLUE},${0.7 * traceFade})`;
+    ctx.fillStyle = `rgba(${BLUE},${traceFade})`;
+    for (const [a, b] of ARMS) {
+      const head = { x: lerp(a.x, b.x, trace), y: lerp(a.y, b.y, trace) };
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(head.x, head.y); ctx.stroke();
+      if (trace < 1) { ctx.beginPath(); ctx.arc(head.x, head.y, 2.6, 0, TAU); ctx.fill(); }
+    }
+  }
+  const sweep = easeInOut((t - 2.75) / 0.95), sweepFade = 1 - smooth(4.2, 4.9, t);
+  if (sweep > 0 && sweepFade > 0) {
+    ctx.strokeStyle = `rgba(236,238,243,${0.28 * sweepFade})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(0, 0, R + 22, Math.PI / 2, Math.PI / 2 + Math.PI * sweep); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, R + 22, Math.PI / 2 - Math.PI * sweep, Math.PI / 2); ctx.stroke();
+  }
+
+  // 5. Dots: the grid pops in behind the scan front, then the V inflates from the root up both arms.
+  const shimmer = (t - 5.15) / 0.95;
+  for (const d of dots) {
+    const appear = easeOut((t - (1.88 + 0.8 * (d.toRoot / (1.7 * R)))) / 0.28);
+    if (appear <= 0) continue;
+    const fade = exhale(d);
+    if (fade <= 0) continue;
+    const L = look(d);
+    let r = L.field, color = WHITE, alpha = L.fieldAlpha;
+    if (d.root) {
+      const g = back((t - 3.45) / 0.5);
+      r = lerp(L.field, L.r, g); color = mix(WHITE, CORAL, clamp(g * 1.5)); alpha = lerp(alpha, 1, clamp(g));
+    } else if (d.k > 0.02) {
+      const grow = back((t - (3.58 + 0.85 * d.fromRoot + 0.14 * (1 - d.k))) / 0.46);
+      r = lerp(L.field, L.r, grow);
+      color = mix(WHITE, L.color, clamp(grow));
+      alpha = lerp(L.fieldAlpha, L.alpha, clamp(grow));
+      if (!opts.still && shimmer > -0.2 && shimmer < 1.2) {
+        const glow = Math.exp(-(((d.fromRoot - shimmer) / 0.13) ** 2));
+        color = mix(color, WHITE, 0.4 * glow * d.k);
+        r *= 1 + 0.08 * glow * d.k;
+      }
+    }
+    ctx.fillStyle = `rgba(${color},${alpha * fade})`;
+    ctx.beginPath(); ctx.arc(d.x, d.y, Math.max(0.01, r * appear * fade), 0, TAU); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// Final mark as SVG (vector logo export).
+function svg() {
+  const parts = dots.map((d) => {
+    const L = look(d);
+    return `<circle cx="${(d.x + 400).toFixed(1)}" cy="${(d.y + 396).toFixed(1)}" r="${L.r.toFixed(2)}" fill="rgb(${L.color})" fill-opacity="${L.alpha.toFixed(3)}"/>`;
+  });
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="80 76 640 640" width="640" height="640">${parts.join('')}</svg>`;
+}
+
+const canvas = document.getElementById('mark');
+const ctx = canvas.getContext('2d');
+const hash = location.hash.slice(1);
+if (/^f\d+$/.test(hash)) {                       // export one frame: #f<index> at 30 fps
+  document.body.classList.add('export');
+  frame(ctx, Number(hash.slice(1)) / 30);
+} else if (hash === 'still') {                   // the finished mark
+  document.body.classList.add('export');
+  frame(ctx, 5.0, { still: true });
+} else if (hash === 'svg') {                     // vector export for --dump-dom
+  document.body.textContent = svg();
+} else if (/^png\d+$/.test(hash)) {            // one frame as PNG data, e.g. #png50 for t = 5.0 s
+  frame(ctx, Number(hash.slice(3)) / 10, { still: true });
+  document.body.textContent = canvas.toDataURL('image/png');
+} else if (/^dump\d*$/.test(hash)) {            // every frame as PNG data lines, for video export via --dump-dom
+  const step = Number(hash.slice(4) || 1), lines = [];
+  for (let f = 0; f < LOOP * 30; f += step) { frame(ctx, f / 30); lines.push(canvas.toDataURL('image/png')); }
+  document.body.textContent = lines.join('\n');
+} else {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  canvas.width = canvas.height = SIZE * dpr;
+  ctx.scale(dpr, dpr);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let playing = !reduce, offset = 0, last = performance.now();
+  const clock = document.getElementById('clock');
+  const button = document.getElementById('toggle');
+  button.textContent = playing ? 'Pause' : 'Play';
+  button.addEventListener('click', () => { playing = !playing; button.textContent = playing ? 'Pause' : 'Play'; last = performance.now(); });
+  const draw = (t) => { frame(ctx, t); clock.textContent = `${t.toFixed(1)} s`; };
+  if (reduce) { offset = 5.0; draw(offset); }
+  const tick = (now) => {
+    if (playing) { offset = (offset + (now - last) / 1000) % LOOP; draw(offset); }
+    last = now;
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+</script>

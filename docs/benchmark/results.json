@@ -1,0 +1,1201 @@
+{
+ "rows": [
+  {
+   "task": "B1",
+   "type": "feature location",
+   "repo": "Bilbo",
+   "baseline_default": {
+    "tokens": 213014,
+    "tokens_range": [
+     213014,
+     213014
+    ],
+    "cost": 0.38115639999999995,
+    "turns": 9,
+    "seconds": 52.734,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 97.95617749953968,
+    "quality_range": [
+     97.95617749953968,
+     97.95617749953968
+    ],
+    "recall": 97.22222222222221,
+    "precision": 98.7012987012987,
+    "usefulness": 90.0
+   },
+   "vesalius_deferred": {
+    "tokens": 76449,
+    "tokens_range": [
+     76449,
+     76449
+    ],
+    "cost": 0.1853178,
+    "turns": 3,
+    "seconds": 25.26,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 91.76225234619395,
+    "quality_range": [
+     91.76225234619395,
+     91.76225234619395
+    ],
+    "recall": 88.88888888888889,
+    "precision": 94.82758620689656,
+    "usefulness": 70.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "B2",
+   "type": "change impact",
+   "repo": "Bilbo",
+   "baseline_default": {
+    "tokens": 165647,
+    "tokens_range": [
+     165647,
+     165647
+    ],
+    "cost": 0.2329582,
+    "turns": 6,
+    "seconds": 31.5,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 90.0
+   },
+   "vesalius_deferred": {
+    "tokens": 48722,
+    "tokens_range": [
+     48722,
+     48722
+    ],
+    "cost": 0.13708199999999998,
+    "turns": 3,
+    "seconds": 16.892,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 98.87640449438202,
+    "quality_range": [
+     98.87640449438202,
+     98.87640449438202
+    ],
+    "recall": 100.0,
+    "precision": 97.77777777777777,
+    "usefulness": 85.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "B3",
+   "type": "callers",
+   "repo": "Bilbo",
+   "baseline_default": {
+    "tokens": 86472,
+    "tokens_range": [
+     86472,
+     86472
+    ],
+    "cost": 0.1057882,
+    "turns": 4,
+    "seconds": 14.648,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 90.0
+   },
+   "vesalius_deferred": {
+    "tokens": 43885,
+    "tokens_range": [
+     43885,
+     43885
+    ],
+    "cost": 0.1946752,
+    "turns": 2,
+    "seconds": 18.3,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "C1",
+   "type": "symbol usage",
+   "repo": "cinder",
+   "baseline_default": {
+    "tokens": 84052,
+    "tokens_range": [
+     84052,
+     84052
+    ],
+    "cost": 0.1944326,
+    "turns": 4,
+    "seconds": 28.291,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 90.0
+   },
+   "vesalius_deferred": {
+    "tokens": 67214,
+    "tokens_range": [
+     67214,
+     67214
+    ],
+    "cost": 0.11405140000000001,
+    "turns": 3,
+    "seconds": 19.506,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 98.63013698630138,
+    "quality_range": [
+     98.63013698630138,
+     98.63013698630138
+    ],
+    "recall": 100.0,
+    "precision": 97.2972972972973,
+    "usefulness": 85.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "C2",
+   "type": "architecture",
+   "repo": "cinder",
+   "baseline_default": {
+    "tokens": 485906,
+    "tokens_range": [
+     485906,
+     485906
+    ],
+    "cost": 0.5695952000000001,
+    "turns": 13,
+    "seconds": 132.766,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 94.03160506725871,
+    "quality_range": [
+     94.03160506725871,
+     94.03160506725871
+    ],
+    "recall": 89.28571428571429,
+    "precision": 99.3103448275862,
+    "usefulness": 80.0
+   },
+   "vesalius_deferred": {
+    "tokens": 180904,
+    "tokens_range": [
+     180904,
+     180904
+    ],
+    "cost": 0.2464348,
+    "turns": 7,
+    "seconds": 59.742,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 93.75771033802121,
+    "quality_range": [
+     93.75771033802121,
+     93.75771033802121
+    ],
+    "recall": 89.28571428571429,
+    "precision": 98.7012987012987,
+    "usefulness": 80.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "C3",
+   "type": "dependents",
+   "repo": "cinder",
+   "baseline_default": {
+    "tokens": 223008,
+    "tokens_range": [
+     223008,
+     223008
+    ],
+    "cost": 0.3397942,
+    "turns": 7,
+    "seconds": 89.902,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 97.40932642487047,
+    "quality_range": [
+     97.40932642487047,
+     97.40932642487047
+    ],
+    "recall": 100.0,
+    "precision": 94.94949494949495,
+    "usefulness": 80.0
+   },
+   "vesalius_deferred": {
+    "tokens": 46097,
+    "tokens_range": [
+     46097,
+     46097
+    ],
+    "cost": 0.1298616,
+    "turns": 2,
+    "seconds": 20.128,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 97.36003641329086,
+    "quality_range": [
+     97.36003641329086,
+     97.36003641329086
+    ],
+    "recall": 95.83333333333334,
+    "precision": 98.93617021276596,
+    "usefulness": 85.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "E1",
+   "type": "feature location",
+   "repo": "Espresso",
+   "baseline_default": {
+    "tokens": 187730,
+    "tokens_range": [
+     187730,
+     187730
+    ],
+    "cost": 0.2458866,
+    "turns": 10,
+    "seconds": 40.821,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 98.24561403508771,
+    "quality_range": [
+     98.24561403508771,
+     98.24561403508771
+    ],
+    "recall": 96.55172413793103,
+    "precision": 100.0,
+    "usefulness": 88.00000000000001
+   },
+   "vesalius_deferred": {
+    "tokens": 157691,
+    "tokens_range": [
+     157691,
+     157691
+    ],
+    "cost": 0.27086140000000003,
+    "turns": 9,
+    "seconds": 51.311,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 98.24561403508771,
+    "quality_range": [
+     98.24561403508771,
+     98.24561403508771
+    ],
+    "recall": 96.55172413793103,
+    "precision": 100.0,
+    "usefulness": 90.0
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "E2",
+   "type": "symbol usage",
+   "repo": "Espresso",
+   "baseline_default": {
+    "tokens": 39822,
+    "tokens_range": [
+     39822,
+     39822
+    ],
+    "cost": 0.07363700000000001,
+    "turns": 2,
+    "seconds": 9.269,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 96.7741935483871,
+    "quality_range": [
+     96.7741935483871,
+     96.7741935483871
+    ],
+    "recall": 93.75,
+    "precision": 100.0,
+    "usefulness": 80.0
+   },
+   "vesalius_deferred": {
+    "tokens": 42510,
+    "tokens_range": [
+     42510,
+     42510
+    ],
+    "cost": 0.197018,
+    "turns": 3,
+    "seconds": 14.722,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 94.78021978021978,
+    "quality_range": [
+     94.78021978021978,
+     94.78021978021978
+    ],
+    "recall": 93.75,
+    "precision": 95.83333333333334,
+    "usefulness": 70.0
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "E3",
+   "type": "dependents",
+   "repo": "Espresso",
+   "baseline_default": {
+    "tokens": 213742,
+    "tokens_range": [
+     213742,
+     213742
+    ],
+    "cost": 0.4033156,
+    "turns": 5,
+    "seconds": 29.992,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 99.11504424778761,
+    "quality_range": [
+     99.11504424778761,
+     99.11504424778761
+    ],
+    "recall": 100.0,
+    "precision": 98.24561403508771,
+    "usefulness": 85.0
+   },
+   "vesalius_deferred": {
+    "tokens": 43687,
+    "tokens_range": [
+     43687,
+     43687
+    ],
+    "cost": 0.101578,
+    "turns": 2,
+    "seconds": 14.469,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 90.0
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "E4",
+   "type": "architecture",
+   "repo": "Espresso",
+   "baseline_default": {
+    "tokens": 230712,
+    "tokens_range": [
+     230712,
+     230712
+    ],
+    "cost": 0.44321560000000004,
+    "turns": 7,
+    "seconds": 71.795,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 93.94507375112053,
+    "quality_range": [
+     93.94507375112053,
+     93.94507375112053
+    ],
+    "recall": 89.79591836734694,
+    "precision": 98.49624060150376,
+    "usefulness": 80.0
+   },
+   "vesalius_deferred": {
+    "tokens": 274474,
+    "tokens_range": [
+     274474,
+     274474
+    ],
+    "cost": 0.3813552,
+    "turns": 9,
+    "seconds": 69.518,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 91.91123836793128,
+    "quality_range": [
+     91.91123836793128,
+     91.91123836793128
+    ],
+    "recall": 85.71428571428571,
+    "precision": 99.07407407407408,
+    "usefulness": 75.0
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "H1",
+   "type": "feature location",
+   "repo": "Haplo Invest",
+   "baseline_default": {
+    "tokens": 267577,
+    "tokens_range": [
+     267577,
+     267577
+    ],
+    "cost": 0.4696282,
+    "turns": 15,
+    "seconds": 46.341,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 97.82608695652173,
+    "quality_range": [
+     97.82608695652173,
+     97.82608695652173
+    ],
+    "recall": 95.74468085106383,
+    "precision": 100.0,
+    "usefulness": 93.0
+   },
+   "vesalius_deferred": {
+    "tokens": 272790,
+    "tokens_range": [
+     272790,
+     272790
+    ],
+    "cost": 0.39095160000000007,
+    "turns": 14,
+    "seconds": 59.135,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 96.0755385069342,
+    "quality_range": [
+     96.0755385069342,
+     96.0755385069342
+    ],
+    "recall": 93.61702127659575,
+    "precision": 98.66666666666667,
+    "usefulness": 88.00000000000001
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "H2",
+   "type": "callers",
+   "repo": "Haplo Invest",
+   "baseline_default": {
+    "tokens": 172516,
+    "tokens_range": [
+     172516,
+     172516
+    ],
+    "cost": 0.2899568,
+    "turns": 10,
+    "seconds": 32.081,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 98.3050847457627,
+    "quality_range": [
+     98.3050847457627,
+     98.3050847457627
+    ],
+    "recall": 100.0,
+    "precision": 96.66666666666667,
+    "usefulness": 95.0
+   },
+   "vesalius_deferred": {
+    "tokens": 66492,
+    "tokens_range": [
+     66492,
+     66492
+    ],
+    "cost": 0.1130604,
+    "turns": 4,
+    "seconds": 15.232,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 97.95918367346938,
+    "quality_range": [
+     97.95918367346938,
+     97.95918367346938
+    ],
+    "recall": 100.0,
+    "precision": 96.0,
+    "usefulness": 90.0
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "H3",
+   "type": "change impact",
+   "repo": "Haplo Invest",
+   "baseline_default": {
+    "tokens": 119285,
+    "tokens_range": [
+     119285,
+     119285
+    ],
+    "cost": 0.17210099999999998,
+    "turns": 6,
+    "seconds": 53.053,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 97.01423977951308,
+    "quality_range": [
+     97.01423977951308,
+     97.01423977951308
+    ],
+    "recall": 97.05882352941177,
+    "precision": 96.96969696969697,
+    "usefulness": 80.0
+   },
+   "vesalius_deferred": {
+    "tokens": 69420,
+    "tokens_range": [
+     69420,
+     69420
+    ],
+    "cost": 0.1346076,
+    "turns": 4,
+    "seconds": 17.391,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.0
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "H4",
+   "type": "dependents",
+   "repo": "Haplo Invest",
+   "baseline_default": {
+    "tokens": 218404,
+    "tokens_range": [
+     218404,
+     218404
+    ],
+    "cost": 0.3320082,
+    "turns": 9,
+    "seconds": 43.522,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.0
+   },
+   "vesalius_deferred": {
+    "tokens": 44946,
+    "tokens_range": [
+     44946,
+     44946
+    ],
+    "cost": 0.1200992,
+    "turns": 2,
+    "seconds": 14.197,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 90.0
+   },
+   "set": "heldout"
+  },
+  {
+   "task": "I1",
+   "type": "cycles",
+   "repo": "itsyconnect-macos",
+   "baseline_default": {
+    "tokens": 338278,
+    "tokens_range": [
+     338278,
+     338278
+    ],
+    "cost": 0.5673426,
+    "turns": 12,
+    "seconds": 72.073,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 97.77777777777777,
+    "quality_range": [
+     97.77777777777777,
+     97.77777777777777
+    ],
+    "recall": 100.0,
+    "precision": 95.65217391304348,
+    "usefulness": 85.0
+   },
+   "vesalius_deferred": {
+    "tokens": 89282,
+    "tokens_range": [
+     89282,
+     89282
+    ],
+    "cost": 0.2135256,
+    "turns": 4,
+    "seconds": 16.505,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "I2",
+   "type": "dependents",
+   "repo": "itsyconnect-macos",
+   "baseline_default": {
+    "tokens": 121181,
+    "tokens_range": [
+     121181,
+     121181
+    ],
+    "cost": 0.15709259999999997,
+    "turns": 7,
+    "seconds": 28.833,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.0
+   },
+   "vesalius_deferred": {
+    "tokens": 70260,
+    "tokens_range": [
+     70260,
+     70260
+    ],
+    "cost": 0.1204326,
+    "turns": 3,
+    "seconds": 20.28,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 93.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "I3",
+   "type": "feature location",
+   "repo": "itsyconnect-macos",
+   "baseline_default": {
+    "tokens": 257031,
+    "tokens_range": [
+     257031,
+     257031
+    ],
+    "cost": 0.36839039999999995,
+    "turns": 17,
+    "seconds": 50.683,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.0
+   },
+   "vesalius_deferred": {
+    "tokens": 106683,
+    "tokens_range": [
+     106683,
+     106683
+    ],
+    "cost": 0.20803060000000004,
+    "turns": 8,
+    "seconds": 27.083,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 90.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "W1",
+   "type": "change impact",
+   "repo": "Wax",
+   "baseline_default": {
+    "tokens": 312184,
+    "tokens_range": [
+     312184,
+     312184
+    ],
+    "cost": 0.439203,
+    "turns": 10,
+    "seconds": 131.473,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 98.94736842105264,
+    "quality_range": [
+     98.94736842105264,
+     98.94736842105264
+    ],
+    "recall": 100.0,
+    "precision": 97.91666666666666,
+    "usefulness": 90.0
+   },
+   "vesalius_deferred": {
+    "tokens": 364254,
+    "tokens_range": [
+     364254,
+     364254
+    ],
+    "cost": 0.3492004,
+    "turns": 12,
+    "seconds": 43.462,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 94.21276595744679,
+    "quality_range": [
+     94.21276595744679,
+     94.21276595744679
+    ],
+    "recall": 93.10344827586206,
+    "precision": 95.34883720930233,
+    "usefulness": 70.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "W2",
+   "type": "feature location",
+   "repo": "Wax",
+   "baseline_default": {
+    "tokens": 219301,
+    "tokens_range": [
+     219301,
+     219301
+    ],
+    "cost": 0.41022539999999996,
+    "turns": 7,
+    "seconds": 50.838,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 96.5113850010445,
+    "quality_range": [
+     96.5113850010445,
+     96.5113850010445
+    ],
+    "recall": 94.5945945945946,
+    "precision": 98.50746268656717,
+    "usefulness": 90.0
+   },
+   "vesalius_deferred": {
+    "tokens": 151293,
+    "tokens_range": [
+     151293,
+     151293
+    ],
+    "cost": 0.35401320000000003,
+    "turns": 6,
+    "seconds": 42.192,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 94.13541404480242,
+    "quality_range": [
+     94.13541404480242,
+     94.13541404480242
+    ],
+    "recall": 91.8918918918919,
+    "precision": 96.49122807017544,
+    "usefulness": 75.0
+   },
+   "set": "original"
+  },
+  {
+   "task": "W3",
+   "type": "dependents",
+   "repo": "Wax",
+   "baseline_default": {
+    "tokens": 122219,
+    "tokens_range": [
+     122219,
+     122219
+    ],
+    "cost": 0.2260668,
+    "turns": 4,
+    "seconds": 17.053,
+    "used_vesalius": 0,
+    "reps": 1,
+    "quality": 92.98085688240656,
+    "quality_range": [
+     92.98085688240656,
+     92.98085688240656
+    ],
+    "recall": 89.47368421052632,
+    "precision": 96.7741935483871,
+    "usefulness": 75.0
+   },
+   "vesalius_deferred": {
+    "tokens": 51899,
+    "tokens_range": [
+     51899,
+     51899
+    ],
+    "cost": 0.14700180000000002,
+    "turns": 2,
+    "seconds": 14.756,
+    "used_vesalius": 1,
+    "reps": 1,
+    "quality": 100.0,
+    "quality_range": [
+     100.0,
+     100.0
+    ],
+    "recall": 100.0,
+    "precision": 100.0,
+    "usefulness": 95.0
+   },
+   "set": "original"
+  }
+ ],
+ "summary": {
+  "baseline_default": {
+   "tasks": 20,
+   "mean_tokens": 203904.05,
+   "median_task_tokens": 213378.0,
+   "mean_cost": 0.32108973,
+   "mean_turns": 8.2,
+   "mean_seconds": 51.3834,
+   "quality": 97.84199170690654,
+   "recall": 97.17386810994054,
+   "precision": 98.60949267829997,
+   "usefulness": 87.3,
+   "runs_using_vesalius": 0,
+   "runs": 20
+  },
+  "vesalius_deferred": {
+   "tasks": 20,
+   "mean_tokens": 113447.6,
+   "median_task_tokens": 69840.0,
+   "mean_cost": 0.20545792000000002,
+   "mean_turns": 5.1,
+   "mean_seconds": 29.00405,
+   "quality": 97.38532574720405,
+   "recall": 96.43181539022515,
+   "precision": 98.44771347747941,
+   "usefulness": 85.3,
+   "runs_using_vesalius": 20,
+   "runs": 20
+  }
+ },
+ "comparisons": {
+  "shipped": {
+   "baseline": "baseline_default",
+   "treatment": "vesalius_deferred",
+   "tasks": 20,
+   "token_change_pct": -50.64879724468856,
+   "token_change_ci95": [
+    -61.537870933611615,
+    -36.440514447007885
+   ],
+   "cost_change_pct": -34.40102782367418,
+   "quality_delta": -0.45666595970249163,
+   "quality_delta_ci95": [
+    -1.5655029389315913,
+    0.7629443932686328
+   ],
+   "usefulness_delta": -2.0,
+   "turns_change_pct": -43.07510102126108,
+   "seconds_change_pct": -40.846181809504564,
+   "fewer_tokens_tasks": 16,
+   "better_quality_tasks": 3,
+   "worse_quality_tasks": 8
+  }
+ },
+ "comparisons_by_set": {
+  "shipped": {
+   "heldout": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 8,
+    "token_change_pct": -43.584564488704345,
+    "token_change_ci95": [
+     -65.29785052320491,
+     -11.942237361428665
+    ],
+    "cost_change_pct": -29.848112465838106,
+    "quality_delta": -0.28169283756726493,
+    "quality_delta_ci95": [
+     -1.304419344774466,
+     0.8895748607371594
+    ],
+    "usefulness_delta": -1.0,
+    "turns_change_pct": -33.466341759968685,
+    "seconds_change_pct": -29.587714935743804,
+    "fewer_tokens_tasks": 5,
+    "better_quality_tasks": 1,
+    "worse_quality_tasks": 3
+   },
+   "original": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 12,
+    "token_change_pct": -54.859717531447295,
+    "token_change_ci95": [
+     -65.31815515574249,
+     -41.46832034645587
+    ],
+    "cost_change_pct": -37.27093454484549,
+    "quality_delta": -0.5733147077926427,
+    "quality_delta_ci95": [
+     -2.2564413892863193,
+     1.327751057324953
+    ],
+    "usefulness_delta": -2.6666666666666665,
+    "turns_change_pct": -48.69699009124159,
+    "seconds_change_pct": -47.332947809395485,
+    "fewer_tokens_tasks": 11,
+    "better_quality_tasks": 2,
+    "worse_quality_tasks": 5
+   }
+  }
+ },
+ "comparisons_by_type": {
+  "shipped": {
+   "architecture": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 2,
+    "token_change_pct": -33.44763889978929,
+    "token_change_ci95": [
+     -62.76975382069783,
+     18.968237456222468
+    ],
+    "cost_change_pct": -38.986607294502384,
+    "quality_delta": -1.1538650562133768,
+    "quality_delta_ci95": [
+     -2.033835383189256,
+     -0.27389472923749736
+    ],
+    "usefulness_delta": -2.5,
+    "turns_change_pct": -16.79497056621563,
+    "seconds_change_pct": -33.99178663086676,
+    "fewer_tokens_tasks": 1,
+    "better_quality_tasks": 0,
+    "worse_quality_tasks": 1
+   },
+   "callers": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 2,
+    "token_change_pct": -55.77271218832903,
+    "token_change_ci95": [
+     -61.45748800111295,
+     -49.249468035896015
+    ],
+    "cost_change_pct": -15.291827822571447,
+    "quality_delta": -0.1729505361466579,
+    "quality_delta_ci95": [
+     -0.3459010722933158,
+     0.0
+    ],
+    "usefulness_delta": 0.0,
+    "turns_change_pct": -55.278640450004204,
+    "seconds_change_pct": -22.9822377395158,
+    "fewer_tokens_tasks": 2,
+    "better_quality_tasks": 0,
+    "worse_quality_tasks": 0
+   },
+   "change impact": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 3,
+    "token_change_pct": -41.54639077332036,
+    "token_change_ci95": [
+     -70.58685035044402,
+     16.67926607385388
+    ],
+    "cost_change_pct": -28.47365760978623,
+    "quality_delta": -0.9574792495789713,
+    "quality_delta_ci95": [
+     -4.734602463605853,
+     2.985760220486924
+    ],
+    "usefulness_delta": -3.3333333333333335,
+    "turns_change_pct": -26.319370027192267,
+    "seconds_change_pct": -61.26655840877099,
+    "fewer_tokens_tasks": 2,
+    "better_quality_tasks": 1,
+    "worse_quality_tasks": 2
+   },
+   "cycles": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 1,
+    "token_change_pct": -73.60691502255541,
+    "token_change_ci95": null,
+    "cost_change_pct": -62.36390498439568,
+    "quality_delta": 2.2222222222222285,
+    "quality_delta_ci95": null,
+    "usefulness_delta": 10.0,
+    "turns_change_pct": -66.66666666666667,
+    "seconds_change_pct": -77.09960734255546,
+    "fewer_tokens_tasks": 1,
+    "better_quality_tasks": 1,
+    "worse_quality_tasks": 0
+   },
+   "dependents": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 5,
+    "token_change_pct": -70.75121824071498,
+    "token_change_ci95": [
+     -79.45871684800501,
+     -55.715238232230725
+    ],
+    "cost_change_pct": -55.54741859442485,
+    "quality_delta": 1.5709617716452442,
+    "quality_delta_ci95": [
+     -0.019716004631845863,
+     4.211485870556066
+    ],
+    "usefulness_delta": 4.6,
+    "turns_change_pct": -64.75037262185985,
+    "seconds_change_pct": -53.62759564837734,
+    "fewer_tokens_tasks": 5,
+    "better_quality_tasks": 1,
+    "worse_quality_tasks": 0
+   },
+   "feature location": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 5,
+    "token_change_pct": -38.49634888288569,
+    "token_change_ci95": [
+     -56.65040996700925,
+     -12.739679940296245
+    ],
+    "cost_change_pct": -26.311084318089005,
+    "quality_delta": -2.0640889118350714,
+    "quality_delta_ci95": [
+     -4.191549283255855,
+     -0.3501096899175081
+    ],
+    "usefulness_delta": -8.6,
+    "turns_change_pct": -35.34971236071877,
+    "seconds_change_pct": -19.372172781087606,
+    "fewer_tokens_tasks": 4,
+    "better_quality_tasks": 0,
+    "worse_quality_tasks": 3
+   },
+   "symbol usage": {
+    "baseline": "baseline_default",
+    "treatment": "vesalius_deferred",
+    "tasks": 2,
+    "token_change_pct": -7.606830976857381,
+    "token_change_ci95": [
+     -20.03283681530481,
+     6.750037667620923
+    ],
+    "cost_change_pct": 25.276807677015146,
+    "quality_delta": -1.681918390932971,
+    "quality_delta_ci95": [
+     -1.9939737681673222,
+     -1.3698630136986196
+    ],
+    "usefulness_delta": -7.5,
+    "turns_change_pct": 6.066017177982119,
+    "seconds_change_pct": 4.6470346072229995,
+    "fewer_tokens_tasks": 1,
+    "better_quality_tasks": 0,
+    "worse_quality_tasks": 2
+   }
+  }
+ },
+ "vesalius_used_split": {},
+ "used_splits": {
+  "shipped": {
+   "used": {
+    "runs": 20,
+    "token_change_pct": -50.64879724468856,
+    "quality_delta": -0.45666595970249163
+   }
+  }
+ },
+ "vesalius_tool_calls": {
+  "vesalius_deferred": {
+   "feature_map": 5,
+   "usages": 18,
+   "architecture": 2,
+   "dependency_cycles": 1
+  }
+ },
+ "first_prompt_tokens": {
+  "vesalius_deferred": 21050.0,
+  "baseline_default": 20147.0
+ },
+ "judges": 1
+}
