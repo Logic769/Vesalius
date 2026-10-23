@@ -6,19 +6,21 @@
 <p align="center">
   <a href="#quick-start"><b>Quick start</b></a> &nbsp;·&nbsp;
   <a href="#the-five-tools-claude-gets">The five tools</a> &nbsp;·&nbsp;
-  <a href="#the-mac-app">Mac app</a> &nbsp;·&nbsp;
-  <a href="#vs-code">VS Code</a> &nbsp;·&nbsp;
+  <a href="#is-claude-using-it">Is Claude using it?</a> &nbsp;·&nbsp;
   <a href="#does-it-actually-help">Benchmark</a> &nbsp;·&nbsp;
+  <a href="#how-it-compares">How it compares</a> &nbsp;·&nbsp;
+  <a href="#the-mac-app">Mac app</a> &nbsp;·&nbsp;
   <a href="#faq-and-troubleshooting">FAQ</a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/macOS-15%2B-16181D?logo=apple&logoColor=white" alt="macOS 15+">
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white" alt="Swift 6">
+  <img src="https://img.shields.io/badge/brew-haplollc%2Ftap-FBB040?logo=homebrew&logoColor=white" alt="Install with Homebrew: brew install haplollc/tap/vesalius">
   <img src="https://img.shields.io/badge/MCP-5%20tools-7C93FF" alt="MCP server with 5 tools">
   <img src="https://img.shields.io/badge/Claude%20Code-ready-D97757" alt="Works with Claude Code">
   <img src="https://img.shields.io/badge/indexing-100%25%20local-23955A" alt="Indexing runs entirely on your Mac">
-  <img src="https://img.shields.io/badge/tests-298%20passing-23955A" alt="298 tests passing">
+  <img src="https://img.shields.io/badge/tests-323%20passing-23955A" alt="323 tests passing">
 </p>
 
 When you ask an AI coding assistant about your project, something like *"what breaks if I change this?"*, it works
@@ -36,6 +38,114 @@ also comes as a Mac app and a VS Code extension for exploring code yourself. Ves
   <img alt="Benchmark over 20 questions: Claude Code alone averaged 204k tokens per question at 97.8 answer quality; with Vesalius, 113k at 97.4. The typical question used 51% fewer tokens (geometric mean of per-question ratios; 44% by plain means), with no measurable change in overall quality, and Claude chose Vesalius in 20 of 20 runs." src="docs/readme/hero-light.png">
 </picture>
 
+## Quick start
+
+```bash
+brew install haplollc/tap/vesalius
+vesalius setup
+```
+
+That's it. Open Claude Code in any project and ask the way you normally would. It picks the right tool on its own:
+
+> *Who calls `SessionStore.save`, and what would I have to update if I renamed it?*<br>
+> *Where are in-app purchases handled?*<br>
+> *Are there any circular imports under src/?*<br>
+> *What's in PaymentService.swift?*
+
+Most answers come back in one call, with file:line evidence. Claude still opens or greps files when it wants to check
+something, just far less: in our benchmark, 2.65 search, read and shell calls per question instead of 7.2.
+
+Here is setup in Vesalius's own repository:
+
+```
+$ vesalius setup
+Setting up Vesalius 2.1.0 (/opt/homebrew/bin/vesalius)
+
+  ✓ Claude Code: registered for every project
+      claude mcp add --scope user vesalius -- /opt/homebrew/bin/vesalius mcp
+  ✓ Claude Code: now runs Vesalius's read-only tools without asking
+      mcp__vesalius__* in permissions.allow, ~/.claude/settings.json
+  ✓ Claude Code: connected
+  – Codex: not installed
+  ✓ Indexed Vesalius: 256 files in 3.6 s
+
+Next: start Claude Code in a project (in a session that's already open, run /mcp), then ask, for example:
+  Who uses Theme, and what would I have to change to rename it?
+
+  vesalius doctor          checks the connection any time
+  vesalius stats           shows what Claude asked Vesalius
+  vesalius setup --undo    reverses all of this
+```
+
+**What setup changes, and nothing else:**
+
+- It registers `vesalius mcp` with Claude Code for every project (`claude mcp add --scope user`), and with Codex when
+  the `codex` command is installed.
+- It adds `mcp__vesalius__*` to `permissions.allow` in `~/.claude/settings.json`, so Claude Code runs the five
+  read-only tools without asking. The rest of that file stays as it was, and `--no-permissions` skips this step.
+- It indexes the repository you're in, so the first answer doesn't wait.
+
+It never writes to your repository, your CLAUDE.md or your hooks. `--dry-run` shows the plan first, and
+`vesalius setup --undo` reverses it.
+
+**You need** a Mac with Apple silicon on macOS 15 or later, and
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) or another MCP client.
+
+<details>
+<summary><b>Build from source</b> (Xcode 26)</summary>
+
+```bash
+git clone https://github.com/haplollc/Vesalius.git
+cd Vesalius
+scripts/install-cli.sh        # builds a release binary and installs it to ~/.local/bin
+vesalius setup
+```
+
+The first build downloads SwiftSyntax and ArgumentParser (about 47 MB) and compiles SwiftSyntax in release mode, so it
+takes several minutes: about 6 on an M2 in our runs, more on a busy machine. If `~/.local/bin` is not on your `PATH`,
+the script prints the line to add to your shell profile. To install somewhere else, pass a folder:
+`scripts/install-cli.sh ~/bin`.
+</details>
+
+<details>
+<summary><b>Register it by hand, or with another client</b> (team-shared, a pinned repository, Codex, Cursor)</summary>
+
+```bash
+# What setup runs for Claude Code
+claude mcp add --scope user vesalius -- vesalius mcp
+
+# Share it with your team through .mcp.json instead. Each person approves it once when they next start Claude Code;
+# until then `claude mcp list` shows "⏸ Pending approval".
+claude mcp add --scope project vesalius -- vesalius mcp
+
+# Always serve one repository, wherever Claude Code is started
+claude mcp add --scope user vesalius -- vesalius mcp --repo ~/code/your-app
+
+# Load every Vesalius tool on demand instead of two up front (see VESALIUS_MCP_PROFILE under Configuration)
+claude mcp add --scope user vesalius -e VESALIUS_MCP_PROFILE=lean -- vesalius mcp
+```
+
+A new registration in the same scope needs the old one removed first: `claude mcp remove --scope user vesalius`.
+
+Codex reads `~/.codex/config.toml` (setup uses `codex mcp add` when that command is installed):
+
+```toml
+[mcp_servers.vesalius]
+command = "vesalius"
+args = ["mcp"]
+```
+
+Cursor reads `~/.cursor/mcp.json`:
+
+```json
+{ "mcpServers": { "vesalius": { "type": "stdio", "command": "vesalius", "args": ["mcp", "--repo", "/path/to/repo"] } } }
+```
+
+Any other MCP client that speaks stdio can run `vesalius mcp --repo /path/to/repo`; leave out `--repo` only if the
+client starts servers in your project folder. If a client can't find `vesalius`, give its full path,
+`/opt/homebrew/bin/vesalius`. The Mac app's **Settings › Agents** can also register Vesalius with Claude Code and Codex.
+</details>
+
 ## Where it helps
 
 - **Before a risky change.** "What breaks if I rename this?" lists the callers, including type-inferred uses a text
@@ -46,99 +156,6 @@ also comes as a Mac app and a VS Code extension for exploring code yourself. Ves
   and fewer turns getting to an answer of about the same quality.
 - **When you want the code to stay healthy.** A health score with every deduction explained, dependency cycles,
   oversized files, possibly unused code, each with its evidence.
-
-## Quick start
-
-**You need:** a Mac with Apple silicon that runs Xcode 26 (Vesalius targets macOS 15 and later; we test on macOS 27
-with Xcode 26.6 and Swift 6.3), and git.
-For the agent part, [Claude Code](https://docs.anthropic.com/en/docs/claude-code). For the editor part, VS Code 1.95
-or later and Node 22 or later.
-
-### 1. Build and install the `vesalius` command
-
-```bash
-git clone https://github.com/haplollc/Vesalius.git
-cd Vesalius
-scripts/install-cli.sh        # builds a release binary and installs it to ~/.local/bin
-vesalius --version            # 2.0.0
-```
-
-The first build downloads SwiftSyntax and ArgumentParser (about 47 MB) and compiles SwiftSyntax in release mode, so it takes several minutes:
-about 6 on an M2 in our runs, more on a busy machine. If `~/.local/bin` is not on your `PATH`, the script prints the
-line to add to your shell profile. To install somewhere else, pass a folder: `scripts/install-cli.sh ~/bin`.
-
-### 2. Index a project
-
-```bash
-cd ~/code/your-app
-vesalius index
-```
-
-Here is Vesalius indexing its own repository:
-
-```
-Indexed ~/code/Vesalius
-  files: 248 scanned · +248 added · ~0 changed · -0 removed · 0 unchanged
-  graph: 9,157 symbols · 79,037 references · 2,611 dependency edges
-  time:  5.97s · index ~/Library/Application Support/Vesalius/Indexes/vesalius-…/index.v4.sqlite
-```
-
-After that, every query re-reads only the files that changed (a refresh with nothing changed took 0.1 to 0.25 s in
-our runs). You can also skip
-this step: the first question from Claude Code builds the index on its own.
-
-### 3. Connect Claude Code
-
-```bash
-claude mcp add --scope user vesalius -- vesalius mcp
-```
-
-That one line works in every project. Claude Code tells the server which folder it is working in, and Vesalius serves
-that repository, indexing it the first time it is asked. Check it with `claude mcp list`:
-
-```
-vesalius: vesalius mcp - ✔ Connected
-```
-
-<details>
-<summary><b>Other ways to register it</b> (team-shared, a full path, a pinned repository)</summary>
-
-```bash
-# Each of these replaces the registration from step 3, so remove that one first:
-claude mcp remove --scope user vesalius
-
-# Share it with your team through .mcp.json. Each person approves it once when they next start Claude Code;
-# until then `claude mcp list` shows "⏸ Pending approval".
-claude mcp add --scope project vesalius -- vesalius mcp
-
-# If Claude Code cannot find `vesalius` on its PATH, give the full path
-claude mcp add --scope user vesalius -- ~/.local/bin/vesalius mcp
-
-# Always serve one repository, wherever Claude Code is started
-claude mcp add --scope user vesalius -- vesalius mcp --repo ~/code/your-app
-
-# Load every Vesalius tool on demand instead of two up front (see VESALIUS_MCP_PROFILE under Configuration)
-claude mcp add --scope user vesalius -e VESALIUS_MCP_PROFILE=lean -- vesalius mcp
-```
-
-Any other MCP client that speaks stdio can run `vesalius mcp --repo /path/to/repo`. The Mac app's
-**Settings › Agents** can register Vesalius with Claude Code and Codex for you, and copies an `mcpServers` JSON block
-for other clients; add `"--repo", "/path/to/repo"` to its `args` unless your client starts servers in the project
-folder.
-</details>
-
-### 4. Ask
-
-Ask Claude Code the way you normally would. It picks the right tool on its own:
-
-> *Who calls `SessionStore.save`, and what would I have to update if I renamed it?*<br>
-> *Where are in-app purchases handled?*<br>
-> *Are there any circular imports under src/?*<br>
-> *What's in PaymentService.swift?*
-
-Most answers come back in one call (long ones in pages), with file:line evidence, and `usages`, `feature_map` and
-`dependency_cycles` also say how complete they are. Claude still opens or greps files when it wants to check
-something, just far less: in our benchmark, 2.65 search, read and shell calls per question instead of 7.2.
 
 ## The five tools Claude gets
 
@@ -159,17 +176,48 @@ This is exactly what Claude sees, because the command line prints the same text 
 ```
 $ vesalius usages RepositoryEngine.ensureFresh
 @discardableResult public func RepositoryEngine.ensureFresh(options:progress:) async throw…  VesaliusKit/Sources/QueryEngine/RepositoryEngine.swift:201-210 · method · target QueryEngine
-2 callers in 2 files (VesaliusCommands 1 · VesaliusMCP 1) · complete: "ensureFresh" occurs 9×: 2 resolved to the target, 1 declaration, 2 strings (DebugCommands.swift:21,76), 4 non-source (README.md); 0 unresolved
-RepositoryEngine (owner type) is used by 56 other files
+3 callers in 3 files (VesaliusCommands 2 · VesaliusMCP 1) · complete: "ensureFresh" occurs 10×: 3 resolved to the target, 1 declaration, 2 strings (DebugCommands.swift:21,76), 4 non-source (README.md); 0 unresolved
+RepositoryEngine (owner type) is used by 59 other files
+VesaliusKit/Sources/VesaliusCommands/SetupCommand.swift
+  func Setup.run() :39-215  type doc: "vesalius setup: one command from installed to answering Claude Code's questions, and --undo to reve…"
+    186 │ let summary = try await engine.ensureFresh { progress.update($0) }
 VesaliusKit/Sources/VesaliusCommands/VesaliusCommand.swift
-  func GlobalOptions.engine() :70-81  "Opens the engine and brings the index up to date unless --no-refresh."
-    77 │ if let summary = try await engine.ensureFresh(progress: { printer.update($0) })
-    called by: runTool(_:_:full:) :95 · Watch.run() :254 · DebugCompleteness.run() DebugCommands.swift:31 · +22
+  func GlobalOptions.engine() :75-86  "Opens the engine and brings the index up to date unless --no-refresh."
+    82 │ if let summary = try await engine.ensureFresh(progress: { printer.update($0) })
+    called by: runTool(_:_:full:) :100 · Watch.run() :270 · DebugCompleteness.run() DebugCommands.swift:31 · +22
 VesaliusKit/Sources/VesaliusMCP/IndexCoordinator.swift
   private func IndexCoordinator.start(engine:force:) :88-105  "Starts a refresh off the actor (indexing must not hold up other calls' cache checks) and waits for…"
     96 │ let summary = force ? try await engine.index(options: options) : try await engine.ensureFresh…ptions: options)
     called by: prepare() :49 · reindexNow() :65
 ```
+
+## Is Claude using it?
+
+The most common complaint about tools like this is that the agent never calls them. So Vesalius keeps a local tally:
+`vesalius stats` shows what Claude asked in the repository you're in. When the answer is "nothing", `vesalius doctor`
+starts the server the way Claude Code would and checks every link from the command to the index. Here are the stats
+after four questions to Claude Code, one of which didn't call Vesalius:
+
+```
+$ vesalius stats
+Vesalius usage · Vesalius · last 30 days
+
+  tool          calls   tokens   per answer   typical time
+  feature_map       1      590          590         249 ms
+  outline           1      318          318          45 ms
+  usages            1     1.0k         1.0k         147 ms
+  total             3     1.9k          644         147 ms
+
+  Last call just now; all over MCP.
+  Completeness checks passed: 2 of 2.
+  Tokens are what Vesalius sent, estimated at 4 characters each, not what it saved; docs/benchmark
+  measures the savings. Typical time is the median.
+  Other repositories: vesalius stats --all
+```
+
+The tally sits next to the indexes. For each call it records the repository path, the tool, the answer's size and time,
+and whether its completeness check passed. It never records your questions, symbols or code. Set
+`VESALIUS_STATS=off` to stop it, or run `vesalius stats --reset` to clear it.
 
 ## Use it yourself
 
@@ -189,8 +237,9 @@ another repository; every query refreshes the index first unless you pass `--no-
 | `vesalius map` | the clustered dependency map, by modules, folders, files or symbols |
 | `vesalius query "<sql>"` | read-only SQL against the index (`--schema` shows the tables) |
 | `vesalius watch` | keep the index current while you work |
+| `vesalius doctor` · `stats` | check the connection to Claude Code · what Claude asked |
 
-`vesalius --help` lists its 29 commands.
+`vesalius --help` lists every command, grouped by what it's for.
 
 <details>
 <summary><b>Real output: a type, a function, a feature, a question</b></summary>
@@ -200,10 +249,10 @@ All of these ran against Vesalius's own code. Long outputs are trimmed where mar
 ```
 $ vesalius usages IndexLocation
 public struct IndexLocation: Sendable, Hashable  VesaliusKit/Sources/RepositoryIndex/IndexLocation.swift:29-152 · struct · target RepositoryIndex
-13 uses in 6 files (Vesalius 1 · QueryEngine 1 · RepositoryIndex 1 · VesaliusCommands 1 · test 2); +2 files use it by type flow, never naming it; 32 member uses · complete: "IndexLocation" occurs 24×: 14 resolved to the target, 1 declaration, 2 comments (OutlineRenderer.swift:6,9), 7 non-source (README.md); 0 unresolved
+27 uses in 10 files (Vesalius 1 · QueryEngine 1 · RepositoryIndex 1 · VesaliusCommands 4 · VesaliusMCP 1 · test 2); +2 files use it by type flow, never naming it; 46 member uses · complete: "IndexLocation" occurs 38×: 28 resolved to the target, 1 declaration, 2 comments (OutlineRenderer.swift:6,9), 7 non-source (README.md); 0 unresolved
 Vesalius/App/AppModel.swift  via 172 │ return IndexLocation.allIndexed().filter { $0.exists && !known.contains($0.path) }
   canonicalRoot(_:) 69 (AppModel.handle)
-[… 11 lines trimmed …]
+[… 18 lines trimmed …]
 Vesalius/Views/Settings/SettingsView.swift  via 101 │ let location = workspace.engine.location  [type-inferred via RepositorySettings.model → AppModel.workspace → Workspace.engine → RepositoryEngine.location: IndexLocation]
   directory 85 (RepositorySettings.body) · databaseURL 90 (RepositorySettings.body)
   removeIndex() 105 (RepositorySettings.body)
@@ -234,28 +283,98 @@ core  VesaliusKit/Sources/QueryEngine/IndexingPipeline.swift  public struct Inde
 call sites: IndexOptions in 6 files (app 4, test 2) · complete: every file that names IndexOptions is listed
   Vesalius/App/Workspace.swift  reindex(initial:rebuild:)  185 │ options.scan.userExclusions = Preferences.exclusions(for: engine.root.path)
   VesaliusKit/Sources/QueryEngine/RepositoryEngine.swift  206 │ if try isOutdated || staleFileCount(options: options.scan) > 0
-  VesaliusKit/Sources/VesaliusCommands/VesaliusCommand.swift  run()  206 │ options.scan.userExclusions = exclude
+  VesaliusKit/Sources/VesaliusCommands/VesaliusCommand.swift  run()  222 │ options.scan.userExclusions = exclude
   VesaliusKit/Sources/VesaliusMCP/IndexCoordinator.swift  26 │ private let options: IndexOptions  ·34
 [… 3 lines trimmed …]
 ```
 
 ```
 $ vesalius ask "where does the app run Claude Code or Codex?" --limit 4
-Most likely in Vesalius/Views/AgentSheet.swift (AgentSheet, AgentSheet.run). Related code is concentrated in Vesalius/App/ (3 of the top results). Also relevant: Vesalius/App/AgentSession.swift, Vesalius/App/Tooling.swift.
+Most likely in VesaliusKit/Sources/VesaliusCommands/SetupCommand.swift (Setup.run, Setup.dryRun). Related code is concentrated in VesaliusKit/Sources/VesaliusCommands/ (2 of the top results). Also relevant: Vesalius/Views/AgentSheet.swift, Vesalius/App/AgentSession.swift.
 
-1. Vesalius/Views/AgentSheet.swift:6-200  [1.00]  defines AgentSheet (struct), AgentSheet.run (method), AgentConsole (struct); semantically similar
+1. VesaliusKit/Sources/VesaliusCommands/SetupCommand.swift:9-259  [1.00]  defines Setup.run (method), Setup.dryRun (property), Setup (struct)
 [… 9 lines trimmed …]
 ```
 
 ```
 $ vesalius dependency-cycles
-0 import cycles in the repository: scanned 201 files, 58 import edges, 0 unresolved; 30 test files excluded
-Swift: 0 module import cycles among 13 modules (31 module dependencies from 240 import lines) · Swift files in one module see each other without imports; reference loops are not import cycles
+0 import cycles in the repository: scanned 207 files, 58 import edges, 0 unresolved; 31 test files excluded
+Swift: 0 module import cycles among 13 modules (32 module dependencies from 255 import lines) · Swift files in one module see each other without imports; reference loops are not import cycles
 no strongly connected component in scope
 ```
 
 Each of these answered in under half a second.
 </details>
+
+## Does it actually help?
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/readme/rounds-dark.png">
+  <img alt="Round 1: Claude called Vesalius in only 2 of 24 runs, so its 13% token gap was mostly run-to-run noise. Round 2: it called Vesalius in 20 of 20 runs; tokens -51%, quality -0.5 points." src="docs/readme/rounds-light.png">
+</picture>
+
+We asked headless Claude Code 20 real questions about 6 codebases, once with Vesalius attached and once without, on
+one pinned build (2.1.307) with the same model, prompt and read-only tools. One AI judge then graded each answer
+blind against a key verified in the code. With Vesalius, the typical question used **51% fewer tokens** (95% CI 36%
+to 62% fewer; the geometric mean of per-question ratios, while plain means fell 44%, from 204k to 113k), took 43%
+fewer turns and finished 41% sooner. Answer quality showed no measurable change overall (−0.5 points on a 0–100
+scale, 95% CI −1.6 to +0.8, with both setups near 97–98), though answers about where a feature lives scored 2.1
+points lower (95% CI −4.2 to −0.4). Eight questions were held out: written after Vesalius 2 was designed, on two
+codebases whose questions and keys were never used to build it. On those it saved 44% (95% CI 12% to 65% fewer). The
+other twelve are the ones it was built against.
+
+Tokens are everything Claude Code reported for a question: input, output, cache reads and cache writes over every
+turn, subagents included, not the size of tool output. The runs without Vesalius had no Vesalius server or tools, and
+their shell allowlist didn't include `vesalius`; none of their 20 transcripts ran it.
+
+The first version taught us the most. Claude Code keeps MCP tools out of sight until it searches for them, and it
+almost never searched: round 1 used Vesalius in 2 of 24 runs, so that round's small token gap was mostly run-to-run
+noise. Vesalius 2 answers each kind of question with one sharper tool and loads the two most-asked ones up front.
+Claude used it in all 20 runs.
+
+<details>
+<summary><b>By kind of question, and where it did not win</b></summary>
+
+| Kind of question | Questions | Tokens vs Claude Code alone | Quality (points) |
+|---|---|---|---|
+| Who depends on this file | 5 | −71% | +1.6 |
+| Import cycles | 1 | −74% | +2.2 |
+| Who calls this | 2 | −56% | −0.2 |
+| What a change affects | 3 | −42% | −1.0 |
+| Where a feature lives | 5 | −38% | −2.1 |
+| Architecture | 2 | −33% | −1.2 |
+| Where a symbol is used | 2 | −8% | −1.7 |
+
+Vesalius used more tokens on 4 of the 20 questions (+2% to +19%). Quality moved by a point or more on 11 of them:
+3 better and 8 worse. With one run and one judge per answer, single questions are noisy, which is why the intervals
+above bootstrap over questions. The harness, the questions, the analysis and the full report are in
+[`docs/benchmark`](docs/benchmark/README.md), so you can run the same comparison on your own code. An exact rerun
+needs more than this repository: three of the six codebases are our own private apps, and the answer keys and run
+transcripts stay private so they cannot leak into future tool designs or training data. The judge's instructions are
+published in [`grading_prompt.md`](docs/benchmark/grading_prompt.md).
+</details>
+
+**[Read the full benchmark write-up](docs/benchmark/README.md)**: the setup, the six codebases, all 20 questions with
+their numbers, exactly how answers were graded, and how to run it on your own code.
+
+## How it compares
+
+Vesalius borrows ideas from a few excellent projects, and it isn't the right tool for everyone. Here is how it differs
+from the closest ones, as of October 2026:
+
+| | **Vesalius** | [CodeGraph](https://github.com/colbymchenry/codegraph) | [graphify](https://github.com/Graphify-Labs/graphify) | [context-mode](https://github.com/mksglu/context-mode) |
+|---|---|---|---|---|
+| **What the agent gets** | answers: uses grouped by function, rename edit lists with the tests to run, feature maps, outlines | one `explore` tool that returns source, call paths and blast radius | graph queries (`query`, `path`, `explain`) over code, docs and media | a sandbox and search for tool output, plus session memory after compaction |
+| **Call graph** | Swift (resolved by type, via SwiftSyntax), TypeScript, JavaScript and Python; 13 more languages without calls | 30+ languages (tree-sitter) | about 40 languages (tree-sitter) | none: it indexes output, not code |
+| **Runs on** | macOS 15+, Apple silicon | macOS, Linux, Windows | macOS, Linux, Windows | macOS, Linux, Windows |
+| **Leaves in your repository** | nothing | a `.codegraph/` folder | a `graphify-out/` folder | nothing |
+| **Setup adds** | an MCP entry and one permission rule | an MCP entry, a permission rule, a prompt hook and a CLAUDE.md block | a skill and a CLAUDE.md block; hooks in always-on mode | hooks on most tools, and skills |
+| **Network** | none | anonymous telemetry (on by default) and an update check | an optional LLM pass over docs and media | an update check |
+
+If you work on Linux or Windows, or mostly in languages Vesalius reads only lexically, CodeGraph or graphify will serve
+you better. context-mode and [rtk](https://github.com/rtk-ai/rtk) shrink the output of commands and logs, which
+Vesalius doesn't touch, so either pairs well with it. [semble](https://github.com/MinishLab/semble) adds fast semantic
+code search in any language, and [mrw](https://qamstack.dev/mrw/) batches an agent's reads and edits.
 
 ## The Mac app
 
@@ -301,8 +420,9 @@ The extension puts the same answers next to your code:
 - a health score in the status bar, refreshed when you save
 - on VS Code 1.101 and later, Vesalius registered as an MCP server for agent mode
 
-Build and install it from this repository (it needs the `vesalius` command from step 1). The `code` command needs
-VS Code's *Shell Command: Install 'code' command in PATH* once; otherwise install the `.vsix` from the Extensions view.
+Build and install it from this repository (it needs the `vesalius` command from the [Quick start](#quick-start)). The
+`code` command needs VS Code's *Shell Command: Install 'code' command in PATH* once; otherwise install the `.vsix` from
+the Extensions view.
 
 ```bash
 cd vscode-extension
@@ -310,53 +430,6 @@ npm ci
 npm run package                                 # compiles and writes vesalius-1.0.0.vsix
 code --install-extension vesalius-1.0.0.vsix    # or Extensions › ⋯ › Install from VSIX… in VS Code
 ```
-
-## Does it actually help?
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/readme/rounds-dark.png">
-  <img alt="Round 1: Claude called Vesalius in only 2 of 24 runs, so its 13% token gap was mostly run-to-run noise. Round 2: it called Vesalius in 20 of 20 runs; tokens -51%, quality -0.5 points." src="docs/readme/rounds-light.png">
-</picture>
-
-We asked headless Claude Code 20 real questions about 6 codebases, once with Vesalius attached and once without, on
-one pinned build (2.1.307) with the same model, prompt and read-only tools. One AI judge then graded each answer
-blind against a key verified in the code. With Vesalius, the typical question used **51% fewer tokens** (95% CI 36%
-to 62% fewer; the geometric mean of per-question ratios, while plain means fell 44%, from 204k to 113k), took 43%
-fewer turns and finished 41% sooner. Answer quality showed no measurable change overall (−0.5 points on a 0–100
-scale, 95% CI −1.6 to +0.8, with both setups near 97–98), though answers about where a feature lives scored 2.1
-points lower (95% CI −4.2 to −0.4). Eight questions were held out: written after Vesalius 2 was designed, on two
-codebases whose questions and keys were never used to build it. On those it saved 44% (95% CI 12% to 65% fewer). The
-other twelve are the ones it was built against.
-
-The first version taught us the most. Claude Code keeps MCP tools out of sight until it searches for them, and it
-almost never searched: round 1 used Vesalius in 2 of 24 runs, so that round's small token gap was mostly run-to-run
-noise. Vesalius 2 answers each kind of question with one sharper tool and loads the two most-asked ones up front.
-Claude used it in all 20 runs.
-
-<details>
-<summary><b>By kind of question, and where it did not win</b></summary>
-
-| Kind of question | Questions | Tokens vs Claude Code alone | Quality (points) |
-|---|---|---|---|
-| Who depends on this file | 5 | −71% | +1.6 |
-| Import cycles | 1 | −74% | +2.2 |
-| Who calls this | 2 | −56% | −0.2 |
-| What a change affects | 3 | −42% | −1.0 |
-| Where a feature lives | 5 | −38% | −2.1 |
-| Architecture | 2 | −33% | −1.2 |
-| Where a symbol is used | 2 | −8% | −1.7 |
-
-Vesalius used more tokens on 4 of the 20 questions (+2% to +19%). Quality moved by a point or more on 11 of them:
-3 better and 8 worse. With one run and one judge per answer, single questions are noisy, which is why the intervals
-above bootstrap over questions. The harness, the questions, the analysis and the full report are in
-[`docs/benchmark`](docs/benchmark/README.md), so you can run the same comparison on your own code. An exact rerun
-needs more than this repository: three of the six codebases are our own private apps, and the answer keys and run
-transcripts stay private so they cannot leak into future tool designs or training data. The judge's instructions are
-published in [`grading_prompt.md`](docs/benchmark/grading_prompt.md).
-</details>
-
-**[Read the full benchmark write-up](docs/benchmark/README.md)**: the setup, the six codebases, all 20 questions with
-their numbers, exactly how answers were graded, and how to run it on your own code.
 
 ## Privacy
 
@@ -366,6 +439,9 @@ their numbers, exactly how answers were graded, and how to run it on your own co
   under `$VESALIUS_HOME` if you set it. Delete a folder there, or use **Settings › Repository › Delete Index…** in the
   app. The one exception is an agent run you start from the app in *Allow edits* mode, which edits your working tree;
   choose *Plan only* to keep it read-only.
+- **`vesalius stats` reads a local tally of tool calls.** For each call it records the repository path, the tool, and
+  the answer's size and time, never questions, symbols or code. It sits next to the indexes, and `VESALIUS_STATS=off`
+  stops it.
 - **Semantic search uses Apple's on-device model** (NaturalLanguage sentence embeddings). Nothing is downloaded.
 - Vesalius's answers quote your code, and Claude Code sends what it reads, these answers included, to its model,
   exactly as it would after a grep. Agents started from the app use their own accounts the same way.
@@ -380,9 +456,10 @@ applies to that run only.
 
 | Variable | What it does |
 |---|---|
-| `VESALIUS_HOME` | Where indexes are stored (default `~/Library/Application Support/Vesalius`) |
+| `VESALIUS_HOME` | Where indexes and the usage tally are stored (default `~/Library/Application Support/Vesalius`) |
 | `VESALIUS_REPO` | The repository `vesalius mcp` serves, when you don't pass `--repo` |
 | `VESALIUS_MCP_PROFILE` | `default` (`usages` and `feature_map` up front), `lean` (every tool on demand) or `full` (adds `repo_report`: health, diagnostics, hotspots, unused code) |
+| `VESALIUS_STATS` | `off` stops the local tally behind `vesalius stats` |
 | `VESALIUS_TRACE` | Prints timing traces to stderr |
 
 **Which repository the server picks:** `--repo`, then `$VESALIUS_REPO` (both used exactly as given), then the folder
@@ -407,9 +484,21 @@ stderr names the repository it is serving.
 <details>
 <summary><b>Claude Code doesn't seem to use it</b></summary>
 
-Run `claude mcp list` and check that `vesalius` shows **✔ Connected**. A project-scoped registration shows
-**⏸ Pending approval** until you start `claude` in that folder and approve it. Inside Claude Code, `/mcp` lists the
-server and its tools. If it is connected but unused, ask for it by name once ("use vesalius to find who calls X").
+Run `vesalius doctor` in the project. It checks the command and Claude Code's registration and connection. It also
+starts the server as Claude Code would, to check that it answers, which repository it serves and how fresh that index
+is. Finally it reports when the server was last called over MCP, and prints a fix for anything that's off.
+`vesalius stats` shows what Claude asked. A project-scoped registration shows **⏸ Pending approval** in
+`claude mcp list` until you start `claude` in that folder and approve it, and in a session that was already open,
+`/mcp` reconnects. If it is connected but unused, ask for it by name once ("use vesalius to find who calls X").
+</details>
+
+<details>
+<summary><b>How do I remove it?</b></summary>
+
+`vesalius setup --undo` removes the Claude Code and Codex registrations and, if setup added it, the
+`mcp__vesalius__*` permission rule. Nothing else changes.
+`brew uninstall vesalius` removes the program. Indexes and the usage tally stay in
+`~/Library/Application Support/Vesalius` until you delete that folder.
 </details>
 
 <details>
@@ -433,7 +522,7 @@ will build the index first.
 
 It looks at the `vesalius.cliPath` setting, then `VESALIUS_CLI_PATH`, then your `PATH`, `~/.local/bin`,
 `/usr/local/bin` and `/opt/homebrew/bin`, then a Vesalius.app in /Applications or ~/Applications. Install it with
-`scripts/install-cli.sh` or set `vesalius.cliPath`. If Vesalius.app is in /Applications, **Vesalius: Install Vesalius
+`brew install haplollc/tap/vesalius` or set `vesalius.cliPath`. If Vesalius.app is in /Applications, **Vesalius: Install Vesalius
 CLI** in the command palette links it for you.
 </details>
 
@@ -452,7 +541,7 @@ dynamic dispatch.
 <details>
 <summary><b>How big and how fast?</b></summary>
 
-From our runs on an M2: Vesalius's own 248 files index in about 3 s into a 25 MB database, and a refresh with nothing
+From our runs on an M2: Vesalius's own 256 files index in about 4 s into a 26 MB database, and a refresh with nothing
 changed takes a fraction of a second. The six benchmark codebases took 2.7 s to 20.5 s for a first index (longer on a
 busy machine), the largest with 16,000 symbols and 143,000 references. Once the index is warm, most answers take tens of milliseconds and a
 `feature_map` about a second.
@@ -486,8 +575,8 @@ VesaliusKit (Swift package, shared by app, CLI, MCP)
 ├── SemanticSearch      query parsing, concept expansion, on-device NLEmbedding, hybrid ranking
 ├── QueryEngine         RepositoryEngine facade: incremental pipeline, file watcher, every query
 ├── VesaliusRender      plain-text rendering and token budgets, shared by the CLI and the MCP server
-├── VesaliusMCP         MCP server (JSON-RPC over stdio): five tools, profiles, lazy single-flight indexing
-├── VesaliusCommands    the `vesalius` CLI (ArgumentParser), also linked into the app binary
+├── VesaliusMCP         MCP server (JSON-RPC over stdio): five tools, profiles, lazy single-flight indexing, usage tally
+├── VesaliusCommands    the `vesalius` CLI (ArgumentParser), with setup, doctor and stats; also linked into the app binary
 └── VesaliusCLI         standalone `vesalius` executable
 Vesalius (macOS app)     SwiftUI + AppKit: map canvas, inspector, palette, agent console
 ```
@@ -531,7 +620,7 @@ docs/brand/                the animated logo mark
 ```
 
 ```bash
-(cd VesaliusKit && swift test)      # 298 tests, including end-to-end runs of the real binary over the CLI and MCP
+(cd VesaliusKit && swift test)      # 323 tests, including end-to-end runs of the real binary over the CLI and MCP
 xcodebuild test -project Vesalius.xcodeproj -scheme Vesalius -destination 'platform=macOS'
 (cd vscode-extension && npm ci && npm test)   # a real VS Code against the CLI in VesaliusKit/.build (downloads VS Code once)
 ```
@@ -548,6 +637,12 @@ Vesalius builds on [tree-sitter](https://tree-sitter.github.io) and its TypeScri
 (MIT, vendored with their licenses under `VesaliusKit/Sources/CTreeSitter*`, including tree-sitter's Unicode/ICU
 notice), and on [swift-syntax](https://github.com/swiftlang/swift-syntax) and
 [swift-argument-parser](https://github.com/apple/swift-argument-parser) (Apache 2.0).
+
+`vesalius setup`, `doctor` and `stats` borrow ideas from [CodeGraph](https://github.com/colbymchenry/codegraph),
+[rtk](https://github.com/rtk-ai/rtk), [semble](https://github.com/MinishLab/semble) and
+[context-mode](https://github.com/mksglu/context-mode), and the way the benchmark reports its weak spots owes a lot to
+[mrw](https://qamstack.dev/mrw/). The first spark was
+[a post from Dashbit](https://dashbit.co/blog/evolving-ai-era).
 
 It is named after Andreas Vesalius, whose *De humani corporis fabrica* (1543) mapped the human body from what he
 could actually see. This tries to do the same for code.
