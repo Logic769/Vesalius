@@ -13,30 +13,35 @@ public struct VesaliusCommand: AsyncParsableCommand {
 
     public static let configuration = CommandConfiguration(
         commandName: "vesalius",
-        abstract: "Understand the anatomy of your codebase.",
+        abstract: "A map of your codebase, for you and for Claude Code.",
         discussion: """
-            Vesalius keeps a persistent graph of your repository (files, symbols, imports, references, \
-            calls, dependencies, health) so questions are answered from the index instead of re-scanning \
-            the filesystem. Everything runs locally; Vesalius itself never uploads your code.
+            Vesalius indexes a repository on this Mac (files, symbols, references, calls, dependencies, health) and \
+            answers questions from that index instead of re-reading the code. Everything runs locally; Vesalius \
+            itself never uploads your code.
 
-            Queries update the index incrementally first (only changed files are re-parsed). Use --json for \
-            machine-readable output and --repo to target another repository.
+            Start with `vesalius setup`: it connects Claude Code and indexes the repository you are in. Questions \
+            refresh changed files first. Use --json for machine-readable output and --repo for another repository.
 
             Examples:
-              vesalius index .
-              vesalius usages AuthService.signIn
-              vesalius ask "where is authentication handled?" --json
-              vesalius references UserSession
-              vesalius impact Sources/Auth/AuthService.swift
-              vesalius health
+              vesalius setup
+              vesalius usages AuthService.signIn --change rename
+              vesalius feature-map "where are purchases handled?"
+              vesalius outline Sources/App/AppModel.swift
+              vesalius doctor
+              vesalius stats
             """,
         version: MCPServer.version,
         subcommands: [
-            Index.self, Status.self, Usages.self, FeatureMap.self, Outline.self, DependencyCycles.self,
-            Ask.self, Files.self, Symbols.self, References.self, Callers.self, Callees.self,
-            Dependencies.self, Dependents.self, Impact.self, Context.self, Related.self,
-            Health.self, Diagnostics.self, Hotspots.self, Cycles.self, Unused.self, Architecture.self, Suggestions.self,
-            MapCommand.self, Query.self, Repos.self, Watch.self, MCP.self, Debug.self,
+            Setup.self, Usages.self, FeatureMap.self, Outline.self, Architecture.self, DependencyCycles.self, Ask.self,
+            Index.self, Doctor.self, Stats.self,
+        ],
+        groupedSubcommands: [
+            CommandGroup(name: "Explore", subcommands: [
+                Files.self, Symbols.self, References.self, Callers.self, Callees.self, Dependencies.self, Dependents.self,
+                Impact.self, Context.self, Related.self, MapCommand.self, Query.self,
+            ]),
+            CommandGroup(name: "Code health", subcommands: [Health.self, Diagnostics.self, Hotspots.self, Cycles.self, Unused.self, Suggestions.self]),
+            CommandGroup(name: "Index and server", subcommands: [Status.self, Repos.self, Watch.self, MCP.self, Debug.self]),
         ]
     )
 }
@@ -97,7 +102,10 @@ struct GlobalOptions: ParsableArguments {
             let summary = try await engine.index()
             return summary.filesAdded + summary.filesChanged + summary.filesRemoved
         }
+        let started = Date()
         let output = await MCPToolCatalog.execute(tool, arguments: arguments, context: context)
+        let milliseconds = Int((Date().timeIntervalSince(started) * 1000).rounded())
+        UsageLog.append(.measuring(output, tool: tool.name, via: "cli", repository: engine.root, milliseconds: milliseconds))
         if output.isError { throw ToolFailure(message: output.text) }
         if !json {
             print(output.text)
@@ -165,6 +173,14 @@ final class ProgressPrinter: @unchecked Sendable {
         } else if phaseChanged {
             FileHandle.standardError.write(Data("\(line)\n".utf8))
         }
+    }
+
+    /// Erases the progress line and prints nothing.
+    func clear() {
+        guard enabled, interactive else { return }
+        lock.lock()
+        defer { lock.unlock() }
+        FileHandle.standardError.write(Data("\r\u{1B}[2K".utf8))
     }
 
     func finish(_ message: String) {

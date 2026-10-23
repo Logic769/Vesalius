@@ -1,9 +1,9 @@
 import Foundation
 import VesaliusCore
 
-/// The tools one server offers: five, six under `--profile full`, each listed with
-/// `annotations` (read-only, title) and `_meta` (search hint, up-front loading), and the server instructions
-/// that route questions to them.
+/// The tools one server offers: five, six under `--profile full`, each listed with `annotations` (title; read-only,
+/// idempotent, closed-world) and `_meta` (search hint, up-front loading), and the server instructions that route
+/// questions to them.
 public struct MCPToolCatalog: Sendable {
     public let profile: MCPProfile
     /// `VESALIUS_MCP_ALWAYS_LOAD`: exactly these tools load up front. Nil leaves it to the gates.
@@ -48,7 +48,10 @@ public struct MCPToolCatalog: Sendable {
             "name": .string(tool.name),
             "description": .string(tool.description),
             "inputSchema": tool.inputSchema,
-            "annotations": .object(["readOnlyHint": .bool(true), "title": .string(tool.title)]),
+            "annotations": .object([
+                "title": .string(tool.title), "readOnlyHint": .bool(true), "destructiveHint": .bool(false),
+                "idempotentHint": .bool(true), "openWorldHint": .bool(false),
+            ]),
             "_meta": .object(meta),
         ])
     }

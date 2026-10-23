@@ -90,7 +90,7 @@ let package = Package(
         ),
         // Plain-text rendering shared by the CLI and the MCP server (result types are all in VesaliusCore).
         .target(name: "VesaliusRender", dependencies: ["VesaliusCore"]),
-        .target(name: "VesaliusMCP", dependencies: ["QueryEngine", "VesaliusRender"]),
+        .target(name: "VesaliusMCP", dependencies: ["QueryEngine", "RepositoryIndex", "VesaliusRender"]),
         .target(
             name: "VesaliusCommands",
             dependencies: [

@@ -36,6 +36,6 @@ public struct UsagesTool: MCPTool {
         let page = arguments.int("page") ?? 1
         let result = try context.engine.usages(target, change: change, page: page)
         let text = UsagesRenderer.render(result, budget: context.budget(.usages, page: page))
-        return ToolOutput(text: text, json: AnyEncodable(result), staleFiles: result.staleFiles)
+        return ToolOutput(text: text, json: AnyEncodable(result), staleFiles: result.staleFiles, complete: result.completeness?.isComplete)
     }
 }

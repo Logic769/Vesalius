@@ -58,6 +58,8 @@ Every question went to headless Claude Code twice, once in each setup. Everythin
   `xcrun`.
 - **Project settings only.** `--setting-sources project`, plus `--strict-mcp-config` with a config written for each
   run, so neither setup picks up a developer's own permission grants or MCP servers, or a repository's auto-memory.
+- **No leaks between setups.** In every run without Vesalius, the init record listed no Vesalius server or tools.
+  `vesalius` isn't on the shell allowlist above, and none of those 20 transcripts ran it.
 - **Frozen copies.** Each repository was an APFS clone made for the benchmark, so nobody's ongoing work could change
   the code under a run, and nothing a run did could reach the originals. The harness compares `git status` before and
   after the runs, and nothing had changed.

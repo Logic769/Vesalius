@@ -42,6 +42,7 @@ This extension is a thin client over the `vesalius` command line tool. Every vie
    ```
 
 2. Make the `vesalius` command available. Any one of these works:
+   - Install it with Homebrew: `brew install haplollc/tap/vesalius`.
    - Run `Vesalius: Install Vesalius CLI`. When the Vesalius app is in `/Applications`, this links `~/.local/bin/vesalius` to the command line tool inside the app. No administrator password is needed.
    - In the Vesalius app, open Settings, then Agents, then choose Install for My User.
    - Build it from source and point the `vesalius.cliPath` setting at the binary (see Build from source).

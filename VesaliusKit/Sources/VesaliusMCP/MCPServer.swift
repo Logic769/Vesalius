@@ -10,7 +10,7 @@ import VesaliusCore
 /// running. Results are plain text. Logs go to stderr; stdout carries only protocol messages.
 public final class MCPServer: Sendable {
     public static let supportedProtocolVersions = ["2025-06-18", "2025-03-26", "2024-11-05"]
-    public static let version = "2.0.0"
+    public static let version = "2.1.0"
 
     public let repository: URL
     public let catalog: MCPToolCatalog
@@ -119,6 +119,7 @@ public final class MCPServer: Sendable {
         if case .object(let values) = params["arguments"] ?? .null { arguments = values }
         let started = Date()
         var output: ToolOutput
+        var engine: RepositoryEngine?
         if let problem = MCPToolCatalog.validate(arguments, for: tool) {
             output = .error(problem)
         } else {
@@ -128,6 +129,7 @@ public final class MCPServer: Sendable {
                     logLine("\(name) cancelled")
                     return nil
                 }
+                engine = prepared.engine
                 let coordinator = coordinator
                 let context = ToolContext(engine: prepared.engine) { try await coordinator.reindexNow() }
                 output = await MCPToolCatalog.execute(tool, arguments: arguments, context: context)
@@ -140,7 +142,9 @@ public final class MCPServer: Sendable {
             logLine("\(name) cancelled")
             return nil
         }
-        logLine("\(name) \(String(format: "%.0f", Date().timeIntervalSince(started) * 1000))ms \(output.text.utf8.count)B\(output.isError ? " error" : "")")
+        let milliseconds = Int((Date().timeIntervalSince(started) * 1000).rounded())
+        logLine("\(name) \(milliseconds)ms \(output.text.utf8.count)B\(output.isError ? " error" : "")")
+        UsageLog.append(.measuring(output, tool: name, via: "mcp", repository: engine?.root ?? repository, milliseconds: milliseconds))
         return Self.result(id: id, Self.content(output))
     }
 

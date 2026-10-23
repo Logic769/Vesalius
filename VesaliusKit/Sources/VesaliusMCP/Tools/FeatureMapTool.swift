@@ -28,6 +28,7 @@ public struct FeatureMapTool: MCPTool {
         let question = arguments.string("question") ?? ""
         let result = try context.engine.featureMap(question: question, focus: arguments.string("focus"))
         let text = FeatureMapRenderer.render(result, budget: context.budget(.featureMap))
-        return ToolOutput(text: text, json: AnyEncodable(result), staleFiles: try context.engine.staleEvidenceFiles(of: result))
+        return ToolOutput(text: text, json: AnyEncodable(result), staleFiles: try context.engine.staleEvidenceFiles(of: result),
+                          complete: result.callSites?.completeness.map { $0.hasPrefix("complete") })
     }
 }

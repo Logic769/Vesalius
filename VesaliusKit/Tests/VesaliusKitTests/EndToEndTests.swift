@@ -3,6 +3,7 @@ import Testing
 @testable import QueryEngine
 import RepositoryIndex
 import VesaliusCore
+import VesaliusMCP
 
 /// Drives the real `vesalius` executable: the same binary agents run.
 @Suite("CLI and MCP end to end", .serialized)
@@ -91,7 +92,7 @@ struct EndToEndTests {
 
         #expect(responses.count == 10, "\(output.stderr)")                     // the notification gets no reply
         #expect(response(1)?["result"]?["protocolVersion"]?.stringValue == "2025-03-26")
-        #expect(response(1)?["result"]?["serverInfo"]?["version"]?.stringValue == "2.0.0")
+        #expect(response(1)?["result"]?["serverInfo"]?["version"]?.stringValue == MCPServer.version)
         let instructions = response(1)?["result"]?["instructions"]?.stringValue ?? ""
         #expect(instructions.contains("select:mcp__vesalius__architecture,mcp__vesalius__dependency_cycles,mcp__vesalius__outline\""))
         #expect(instructions.count <= 1_100)
@@ -193,7 +194,7 @@ struct EndToEndTests {
         #expect(served(try listing([], environment: ["CLAUDE_PROJECT_DIR": other.path.appending("/Sources")]).log) == other.path)
 
         let version = try MCPProcess.run(["--version"])
-        #expect(version.stdout.trimmingCharacters(in: .whitespacesAndNewlines) == "2.0.0")
+        #expect(version.stdout.trimmingCharacters(in: .whitespacesAndNewlines) == MCPServer.version)
     }
 
     @Test("The CLI prints exactly the MCP text of a tool")

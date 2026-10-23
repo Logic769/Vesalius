@@ -170,12 +170,16 @@ public struct ToolOutput: Sendable {
     /// Files whose quoted lines no longer match the disk. The dispatcher re-indexes once, runs the tool again and
     /// starts the result with `re-indexed N files`.
     public var staleFiles: [String]
+    /// The answer's completeness check, for tools that run one (`usages`, `feature_map`): true when it says
+    /// complete. Recorded by `vesalius stats`.
+    public var complete: Bool?
 
-    public init(text: String, json: AnyEncodable? = nil, isError: Bool = false, staleFiles: [String] = []) {
+    public init(text: String, json: AnyEncodable? = nil, isError: Bool = false, staleFiles: [String] = [], complete: Bool? = nil) {
         self.text = text
         self.json = json
         self.isError = isError
         self.staleFiles = staleFiles
+        self.complete = complete
     }
 
     public static func error(_ message: String) -> ToolOutput {
