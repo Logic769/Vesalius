@@ -21,7 +21,12 @@
   <img src="https://img.shields.io/badge/Claude%20Code-ready-D97757" alt="Works with Claude Code">
   <img src="https://img.shields.io/badge/indexing-100%25%20local-23955A" alt="Indexing runs entirely on your Mac">
   <img src="https://img.shields.io/badge/tests-323%20passing-23955A" alt="323 tests passing">
-  <a href="https://buymeacoffee.com/jcbuilds"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee"></a>
+</p>
+
+<p align="center">
+  <a href="https://buymeacoffee.com/jcbuilds"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" width="200"></a>
+  <br>
+  <sub>If Vesalius is useful to you, a coffee keeps it going.</sub>
 </p>
 
 When you ask an AI coding assistant about your project, something like *"what breaks if I change this?"*, it works
