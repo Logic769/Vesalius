@@ -1,0 +1,13 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "description": "On-device code graph for Claude Code: usages, feature maps, outlines, and dependency cycles.",
+  "name": "io.github.haplollc/vesalius",
+  "repository": {
+    "id": "1429263581",
+    "source": "github",
+    "url": "https://github.com/haplollc/Vesalius"
+  },
+  "title": "Vesalius",
+  "version": "2.1.0",
+  "websiteUrl": "https://github.com/haplollc/Vesalius"
+}
