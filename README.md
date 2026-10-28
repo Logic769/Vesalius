@@ -1,17 +1,10 @@
+# Vesalius
+Vesalius gives Claude Code a map of your codebase, indexed entirely on your Mac, so it answers questions about your code with exact file and line references in fewer tokens.
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/readme/banner-dark.png">
   <img alt="Vesalius. A map of your codebase, for you and for Claude Code. Built and kept on your Mac." src="docs/readme/banner-light.png">
 </picture>
-
-<p align="center">
-  <a href="#quick-start"><b>Quick start</b></a> &nbsp;·&nbsp;
-  <a href="#the-five-tools-claude-gets">The five tools</a> &nbsp;·&nbsp;
-  <a href="#is-claude-using-it">Is Claude using it?</a> &nbsp;·&nbsp;
-  <a href="#does-it-actually-help">Benchmark</a> &nbsp;·&nbsp;
-  <a href="#how-it-compares">How it compares</a> &nbsp;·&nbsp;
-  <a href="#the-mac-app">Mac app</a> &nbsp;·&nbsp;
-  <a href="#faq-and-troubleshooting">FAQ</a>
-</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/macOS-15%2B-16181D?logo=apple&logoColor=white" alt="macOS 15+">
@@ -20,7 +13,8 @@
   <img src="https://img.shields.io/badge/MCP-5%20tools-7C93FF" alt="MCP server with 5 tools">
   <img src="https://img.shields.io/badge/Claude%20Code-ready-D97757" alt="Works with Claude Code">
   <img src="https://img.shields.io/badge/indexing-100%25%20local-23955A" alt="Indexing runs entirely on your Mac">
-  <img src="https://img.shields.io/badge/tests-323%20passing-23955A" alt="323 tests passing">
+  [![GitHub stars](https://img.shields.io/github/stars/haplollc/Vesalius?style=flat)](https://github.com/haplollc/Vesalius/stargazers)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 </p>
 
 <p align="center">
@@ -28,6 +22,23 @@
   <br>
   <sub>If Vesalius is useful to you, a coffee keeps it going.</sub>
 </p>
+
+**Install**
+
+```bash
+brew install haplollc/tap/vesalius
+vesalius setup
+```
+
+**Try it**
+
+```bash
+vesalius usages RepositoryEngine.ensureFresh
+```
+
+If this is useful, a star helps others find it.
+
+---
 
 When you ask an AI coding assistant about your project, something like *"what breaks if I change this?"*, it works
 the way a new teammate would on their first day: search for a name, open a file, search again, open another file,
@@ -654,3 +665,19 @@ It is named after Andreas Vesalius, whose *De humani corporis fabrica* (1543) ma
 could actually see. This tries to do the same for code.
 
 <p align="center"><sub>Made by <a href="https://github.com/haplollc">Haplo</a></sub></p>
+---
+
+## More from Haplo
+
+More open source from [Haplo](https://github.com/haplollc), built by the same solo developer:
+
+- [ThinkingOrbs](https://github.com/haplollc/ThinkingOrbs): dotted, honestly-3D loading indicators for AI and agent interfaces in SwiftUI. Nine hand-tuned designs, two tuned sizes.
+- [Minted](https://github.com/haplollc/Minted): turn any SVG into a physically-lit 3D gold medallion for SwiftUI.
+- [MuscleMapKit](https://github.com/haplollc/MuscleMapKit): interactive 3D muscle map for iOS. Shade muscles by how hard they were worked, spin the body, tap a group.
+- [ProcessingField](https://github.com/haplollc/ProcessingField): a SwiftUI progress field, a grid of marks whose sizes describe one soft shape that drifts, folds and breathes while your app is busy.
+- [Gepetto](https://github.com/haplollc/Gepetto): a browser agent for iOS and macOS that a person can take over at any time. Real WKWebView, small on-device models, a native SwiftUI panel.
+- [ClayGlobe](https://github.com/haplollc/ClayGlobe): a claymorphic 3D globe for SwiftUI that plants a waving flag on every country you visit.
+- [Mirage](https://github.com/haplollc/Mirage): one-stop on-device diffusion image-generation engine for iOS / macOS / visionOS.
+- [SiriGlass](https://github.com/haplollc/SiriGlass): the Siri drop from iOS 27, for SwiftUI. Liquid Glass that pours out of the Dynamic Island and lights up with your voice.
+- [Scrubbers](https://github.com/haplollc/Scrubbers): twelve sliders you will want to touch, for SwiftUI. One view, one enum.
+- [KoiPond](https://github.com/haplollc/KoiPond): a living koi pond for SwiftUI. Koi glide over any view, lily pads drift on top, and a Metal shader ripples and refracts it all.
