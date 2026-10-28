@@ -1,0 +1,28 @@
+{
+  "author": {
+    "name": "Haplo",
+    "url": "https://github.com/haplollc"
+  },
+  "description": "On-device code graph for Claude Code: who calls what, where features live, and what breaks on change. All tools are read-only and indexing runs on your Mac.",
+  "displayName": "Vesalius",
+  "homepage": "https://github.com/haplollc/Vesalius",
+  "keywords": [
+    "code-graph",
+    "mcp",
+    "claude-code",
+    "static-analysis",
+    "swift"
+  ],
+  "license": "MIT",
+  "name": "vesalius",
+  "repository": "https://github.com/haplollc/Vesalius",
+  "userConfig": {
+    "profile": {
+      "default": "default",
+      "description": "Which Vesalius tools load: default loads usages and feature_map up front, lean loads every tool on demand, full adds repo_report.",
+      "title": "Vesalius MCP profile",
+      "type": "string"
+    }
+  },
+  "version": "2.1.0"
+}
