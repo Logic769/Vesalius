@@ -1,0 +1,27 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "description": "Claude Code plugins from Haplo",
+  "name": "haplo",
+  "owner": {
+    "name": "Haplo"
+  },
+  "plugins": [
+    {
+      "author": {
+        "name": "Haplo"
+      },
+      "description": "On-device code graph for Claude Code: who calls what, where features live, and what breaks on change.",
+      "keywords": [
+        "code-graph",
+        "mcp",
+        "claude-code",
+        "static-analysis",
+        "swift"
+      ],
+      "name": "vesalius",
+      "source": "./plugins/vesalius",
+      "version": "2.1.0"
+    }
+  ],
+  "version": "2.1.0"
+}
