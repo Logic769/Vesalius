@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "vesalius": {
+      "args": [
+        "mcp"
+      ],
+      "command": "vesalius",
+      "env": {
+        "VESALIUS_MCP_PROFILE": "${user_config.profile}"
+      }
+    }
+  }
+}
